@@ -4,18 +4,23 @@ import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import kotlinx.android.synthetic.main.activity_main_menu.*
+import kotlinx.android.synthetic.main.activity_players.*
 
-class MainMenuActivity : AppCompatActivity() {
+class PlayersActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main_menu)
+        setContentView(R.layout.activity_players)
 
-        backButton.setOnClickListener {
-            val play = Intent(this, PlayersActivity::class.java)
+        playButton.setOnClickListener {
+            val play = Intent(this, GameActivity::class.java)
             startActivity(play)
         }
+
+        backButton.setOnClickListener {
+            finish()
+        }
+
     }
 
     override fun onResume() {
@@ -23,7 +28,7 @@ class MainMenuActivity : AppCompatActivity() {
         setFullscreenMode()
     }
 
-    /*Set fullscreen mode*/
+
     private fun setFullscreenMode() {
         window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
                 // Set the content to appear under the system bars so that the
@@ -36,5 +41,3 @@ class MainMenuActivity : AppCompatActivity() {
                 or View.SYSTEM_UI_FLAG_FULLSCREEN)
     }
 }
-
-

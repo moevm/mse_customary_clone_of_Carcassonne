@@ -6,6 +6,24 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:background">@color/colorPrimary</item>
     </style>
 
+
+
+    <style name="MenuButtonStyle" parent="android:style/Widget.Button">
+        <item name="android:background">@drawable/button_rounded</item>
+        <item name="android:layout_height">40dp</item>
+        <item name="android:layout_width">200dp</item>
+    </style>
+
+
+    <style name="ImageMenuButtonStyle" parent="android:style/Widget.ImageButton">
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:layout_height">40dp</item>
+        <item name="android:layout_width">40dp</item>
+        <item name="android:adjustViewBounds">true</item>
+        <item name="android:scaleType">fitXY</item>
+        <item name="android:layout_margin">10dp</item>
+    </style>
 </resources>

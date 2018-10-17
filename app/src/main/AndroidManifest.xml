@@ -22,8 +22,21 @@
                 android:name=".PlayersActivity"
                 android:screenOrientation="sensorLandscape">
         </activity>
-        <activity android:name=".GameActivity"
-                  android:screenOrientation="sensorLandscape">
+        <activity
+                android:name=".GameActivity"
+                android:screenOrientation="sensorLandscape">
+        </activity>
+        <activity
+                android:name=".RulesActivity"
+                android:screenOrientation="sensorLandscape">
+        </activity>
+        <activity
+                android:name=".InfoActivity"
+                android:screenOrientation="sensorLandscape">
+        </activity>
+        <activity
+                android:name=".SettingsActivity"
+                android:screenOrientation="sensorLandscape">
         </activity>
     </application>
 

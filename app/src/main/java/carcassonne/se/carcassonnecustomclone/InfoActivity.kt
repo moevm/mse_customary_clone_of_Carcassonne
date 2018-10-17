@@ -1,17 +1,14 @@
 package carcassonne.se.carcassonnecustomclone
 
-import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import kotlinx.android.synthetic.main.activity_players.*
 
-class PlayersActivity : AppCompatActivity() {
+class InfoActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_players)
-        setButtonListeners()
+        setContentView(R.layout.activity_info)
     }
 
     override fun onResume() {
@@ -31,18 +28,5 @@ class PlayersActivity : AppCompatActivity() {
                 // Hide the nav bar and status bar
                 or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                 or View.SYSTEM_UI_FLAG_FULLSCREEN)
-    }
-
-
-    /*Устанавливает слушатели на кнопки меню*/
-    private fun setButtonListeners() {
-        playButton.setOnClickListener {
-            val play = Intent(this, GameActivity::class.java)
-            startActivity(play)
-        }
-
-        backButton.setOnClickListener {
-            finish()
-        }
     }
 }

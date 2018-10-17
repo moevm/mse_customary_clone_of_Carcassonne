@@ -1,8 +1,10 @@
 package carcassonne.se.carcassonnecustomclone
 
 import android.content.Intent
+import android.os.Build
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.annotation.RequiresApi
 import android.view.View
 import kotlinx.android.synthetic.main.activity_main_menu.*
 
@@ -11,11 +13,9 @@ class MainMenuActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main_menu)
+        setButtonListeners()
 
-        backButton.setOnClickListener {
-            val play = Intent(this, PlayersActivity::class.java)
-            startActivity(play)
-        }
+
     }
 
     override fun onResume() {
@@ -35,6 +35,40 @@ class MainMenuActivity : AppCompatActivity() {
                 or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                 or View.SYSTEM_UI_FLAG_FULLSCREEN)
     }
+
+
+
+    /*Устанавливает слушатели на кнопки меню*/
+    private fun setButtonListeners() {
+        playButton.setOnClickListener {
+            val openPlayersActivity = Intent(this, PlayersActivity::class.java)
+            startActivity(openPlayersActivity)
+        }
+
+        rulesButton.setOnClickListener {
+            val openRulesActivity = Intent(this, RulesActivity::class.java)
+            startActivity(openRulesActivity)
+        }
+
+        //TODO добавить всплывающее окно с подтверждением выхода
+        exitButton.setOnClickListener {
+            finish()
+        }
+
+        settingsButton.setOnClickListener{
+            val openSettingsActivity = Intent(this, SettingsActivity::class.java)
+            startActivity(openSettingsActivity)
+        }
+
+        infoButton.setOnClickListener{
+            val openInfoActivity = Intent(this, InfoActivity::class.java)
+            startActivity(openInfoActivity)
+        }
+
+
+    }
 }
+
+
 
 

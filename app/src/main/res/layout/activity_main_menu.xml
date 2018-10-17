@@ -5,38 +5,50 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorBackground"
-        tools:context=".MainMenuActivity">
+        tools:context=".MainMenuActivity" tools:layout_editor_absoluteY="25dp">
 
-    <Button
-            android:text="@string/button_play"
-            android:background="@color/colorButton"
-            android:layout_width="88dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/backButton"
-            app:layout_constraintStart_toStartOf="@+id/rulesButton" android:layout_marginBottom="16dp"
-            app:layout_constraintBottom_toTopOf="@+id/rulesButton"
-    />
 
-    <Button
-            android:text="@string/button_rules"
-            android:background="@color/colorButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/rulesButton"
-            app:layout_constraintStart_toStartOf="@+id/exitButton" android:layout_marginBottom="16dp"
-            app:layout_constraintBottom_toTopOf="@+id/exitButton"
-    />
+    <LinearLayout android:layout_width="wrap_content" android:layout_height="154dp"
+                  android:orientation="vertical"
+                  android:id="@+id/linearLayout"
+                  app:layout_constraintTop_toTopOf="parent"
+                  app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent"
+                  android:layout_marginTop="148dp" app:layout_constraintHorizontal_bias="0.498">
+        <Button
+                style="@style/MenuButtonStyle"
+                android:text="@string/button_play"
+                android:id="@+id/playButton"
+        />
 
-    <Button
-            android:text="@string/button_exit"
-            android:background="@color/colorButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/exitButton"
-            app:layout_constraintStart_toStartOf="parent" android:layout_marginLeft="304dp"
-            app:layout_constraintBottom_toBottomOf="parent" android:layout_marginStart="304dp"
-            android:layout_marginBottom="80dp"/>
+        <Button
+                style="@style/MenuButtonStyle"
+                android:text="@string/button_rules"
+                android:id="@+id/rulesButton"
+                app:layout_constraintStart_toStartOf="@+id/exitButton" android:layout_marginTop="16dp"
+                app:layout_constraintTop_toBottomOf="@+id/playButton"/>
+
+        <Button
+                style="@style/MenuButtonStyle"
+                android:text="@string/button_exit"
+                android:id="@+id/exitButton"
+                app:layout_constraintStart_toStartOf="parent" android:layout_marginTop="16dp"
+                app:layout_constraintTop_toBottomOf="@+id/rulesButton" app:layout_constraintEnd_toEndOf="parent"/>
+    </LinearLayout>
+
+
+    <ImageButton
+            style="@style/ImageMenuButtonStyle"
+            app:srcCompat="@drawable/ic_settings"
+            android:id="@+id/settingsButton"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"/>
+
+    <ImageButton
+            style="@style/ImageMenuButtonStyle"
+            app:srcCompat="@drawable/ic_info"
+            android:id="@+id/infoButton"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"/>
 
 
 </android.support.constraint.ConstraintLayout>

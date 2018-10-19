@@ -8,17 +8,46 @@
         tools:context=".PlayersActivity">
 
     <Button
-            android:text="Back"
+            style="@style/MenuButtonStyle"
+            android:text="@string/button_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/backButton" app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginLeft="242dp" app:layout_constraintBaseline_toBaselineOf="@+id/playButton"
-            android:layout_marginStart="242dp"/>
+            android:id="@+id/backButton"
+            app:layout_constraintLeft_toLeftOf="@+id/playerArea"
+            app:layout_constraintTop_toBottomOf="@id/playerArea"/>
     <Button
-            android:text="Play"
+            style="@style/MenuButtonStyle"
+            android:text="@string/button_play"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/playButton" android:layout_marginLeft="50dp"
-            android:layout_marginStart="50dp" app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/backButton" android:layout_marginBottom="129dp"/>
+            android:id="@+id/playButton"
+            app:layout_constraintRight_toRightOf="@+id/playerArea"
+            app:layout_constraintTop_toBottomOf="@id/playerArea"/>
+
+    <LinearLayout android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:orientation="horizontal"
+                  android:background="@drawable/button_rounded_corners"
+                  android:padding="10dp"
+                  android:id="@+id/playerArea"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent">
+
+        <Button android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/addButton1"
+                android:background="@drawable/button_round"/>
+        <Button android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/addButton2"
+                android:background="@drawable/button_round"/>
+        <Button android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/addButton3"
+                android:background="@drawable/button_round"/>
+    </LinearLayout>
+
+
 </android.support.constraint.ConstraintLayout>

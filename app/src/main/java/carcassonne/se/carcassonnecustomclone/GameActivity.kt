@@ -93,7 +93,7 @@ class GameActivity : AppCompatActivity() {
             val ancho = width
             val alto = height
             var oddFlag = true
-            var size = 100fЛ
+            var size = 100f
             var widthScreenAlign = 100f
             var heightScreenAlign = 120f
             var center = PointF(widthScreenAlign, heightScreenAlign)

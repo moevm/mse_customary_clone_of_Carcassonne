@@ -17,8 +17,7 @@
         <Button
                 style="@style/MenuButtonStyle"
                 android:text="@string/button_play"
-                android:id="@+id/playButton"
-        />
+                android:id="@+id/playButton"/>
 
         <Button
                 style="@style/MenuButtonStyle"

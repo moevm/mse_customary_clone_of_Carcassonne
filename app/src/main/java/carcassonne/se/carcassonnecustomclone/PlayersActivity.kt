@@ -1,9 +1,17 @@
 package carcassonne.se.carcassonnecustomclone
 
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.PorterDuff
+import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.GradientDrawable
+import android.graphics.drawable.ShapeDrawable
+import android.opengl.Visibility
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.Button
+import android.widget.ImageButton
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_players.*
 
@@ -45,5 +53,15 @@ class PlayersActivity : AppCompatActivity() {
         backButton.setOnClickListener {
             finish()
         }
+
+        addPlayerButton.setOnClickListener {
+            val newPlayer = ImageButton(this)
+            newPlayer.setImageResource(R.drawable.ic_info)
+            newPlayer.setBackgroundResource(R.drawable.button_round)
+            playerArea.addView(newPlayer)
+        }
     }
 }
+
+
+

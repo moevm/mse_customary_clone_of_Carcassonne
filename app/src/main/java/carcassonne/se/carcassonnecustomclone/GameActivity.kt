@@ -176,7 +176,7 @@ class GameActivity : AppCompatActivity() {
 
         fun getIndexHexOnTap(destPoint: PointF, radius: Float) : Int
         {
-            var bestIndex: Int = 0
+            var bestIndex: Int = -1
             var bestDistance: Float = -1f
             for (i in 0 .. hexagonesList.size-1)
             {

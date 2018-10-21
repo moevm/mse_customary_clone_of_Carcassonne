@@ -47,13 +47,13 @@ class GameActivity : AppCompatActivity() {
     class Canvass : View{
 
 
-        class Hexagon(X: Float, Y:Float, side: Float, roundColor: Int)
+        class Hexagon(X: Float, Y:Float, side: Float, roundColor: Int, choosed: Boolean)
         {
             var center: PointF
             var sideLen: Float
             var vertices: List<PointF>
-            private var isChoosed : Boolean
-            private var color : Int
+            private var isChoosed : Boolean = false
+            private var color : Int = 0
             private var selfColor : Int
 
             init
@@ -61,9 +61,11 @@ class GameActivity : AppCompatActivity() {
                 center = PointF(X,Y)
                 sideLen = side
                 vertices = getVerticesCoords()
-                color = roundColor
-                selfColor = color
-                isChoosed = false
+                selfColor = roundColor
+                if(choosed)
+                    choose()
+                else
+                    unchoose()
             }
 
             fun isChoosed() : Boolean
@@ -123,7 +125,7 @@ class GameActivity : AppCompatActivity() {
             }
 
         }
-        var side__ = 175f
+        var side__ = 112f
         var hexagonesList = ArrayList<Hexagon>(0)
         var shouldInit = true
         override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
@@ -142,7 +144,7 @@ class GameActivity : AppCompatActivity() {
                 var hexHorizAlign = (sqrt(3f) / 2) * size
                 while ((center.y + hexVertAlign) < alto) {
                     while ((center.x + hexHorizAlign) < ancho) {
-                        hexagonesList.add(Hexagon(center.x, center.y, size, Color.argb(255, (Math.random() * 255).toInt(), (Math.random() * 255).toInt(), (Math.random() * 255).toInt()) ))
+                        hexagonesList.add(Hexagon(center.x, center.y, size, Color.argb(255, (Math.random() * 255).toInt(), (Math.random() * 255).toInt(), (Math.random() * 255).toInt()), true ))
                         center.x += (hexHorizAlign * 2) + 4
                         println(center)
                     }

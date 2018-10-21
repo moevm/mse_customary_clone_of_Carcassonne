@@ -2,24 +2,24 @@ package carcassonne.se.carcassonnecustomclone
 
 import android.content.Intent
 import android.graphics.Color
-import android.graphics.PorterDuff
-import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.GradientDrawable
-import android.graphics.drawable.ShapeDrawable
-import android.opengl.Visibility
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import android.widget.Button
 import android.widget.ImageButton
-import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_players.*
+import java.util.*
 
 class PlayersActivity : AppCompatActivity() {
+
+    var players: ArrayList<String> = ArrayList()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_players)
+        addNewPlayer()
+        addNewPlayer()
         setButtonListeners()
     }
 
@@ -53,19 +53,49 @@ class PlayersActivity : AppCompatActivity() {
         backButton.setOnClickListener {
             finish()
         }
-
-        addPlayerButton.setOnClickListener {
-            addPlayer()
-        }
     }
 
     /*Добавление нового игрока*/
-    private fun addPlayer() {
+    private fun addNewPlayer() {
+        playerArea.removeView(findViewById(R.id.addPlayerButton))
+        addPlayerButton()
+        addAddButton()
+    }
+
+    /*Добавляет кружок игрока в список*/
+    fun addPlayerButton() {
         val newPlayer = ImageButton(this)
         newPlayer.setImageResource(R.drawable.ic_player)
-        newPlayer.setBackgroundResource(R.drawable.button_round)
+        newPlayer.setBackgroundResource(R.drawable.circle)
+        val rnd = Random() // TODO: брать не рандомные цвета
+        (newPlayer.background as? GradientDrawable)?.setColor(Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256)))
+        newPlayer.setOnClickListener {
+            if(players.size > 2) {
+                players.removeAt(players.lastIndex)
+                playerArea.removeView(newPlayer)
+                if(players.size == 5) {
+                    addAddButton()
+                }
+            }
+        }
         playerArea.addView(newPlayer)
+        players.add("Player${players.size + 1}")
+    }
 
+
+    /*Добавляет кнопку добавления нового игрока*/
+    private fun addAddButton() {
+        if(players.size < 6) {
+            val newAddButton = ImageButton(this)
+            newAddButton.setImageResource(R.drawable.ic_add)
+            newAddButton.setBackgroundResource(R.drawable.circle)
+            newAddButton.id = R.id.addPlayerButton
+            (newAddButton.background as? GradientDrawable)?.setColor(resources.getColor(R.color.colorMenuButton))
+            newAddButton.setOnClickListener {
+                addNewPlayer()
+            }
+            playerArea.addView(newAddButton)
+        }
     }
 }
 

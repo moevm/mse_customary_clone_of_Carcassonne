@@ -27,29 +27,13 @@
     <LinearLayout android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
                   android:orientation="horizontal"
-                  android:background="@drawable/button_rounded_corners"
+                  android:background="@drawable/rounded_corners"
                   android:padding="10dp"
                   android:id="@+id/playerArea"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent">
-
-        <ImageButton android:layout_width="wrap_content"
-                     android:layout_height="wrap_content"
-                     android:id="@+id/player1"
-                     android:background="@drawable/button_round"/>
-
-        <ImageButton android:layout_width="wrap_content"
-                     android:layout_height="wrap_content"
-                     android:id="@+id/player2"
-                     android:background="@drawable/button_round"/>
-
-        <ImageButton android:layout_width="wrap_content"
-                     android:layout_height="wrap_content"
-                     app:srcCompat = "@drawable/ic_add"
-                     android:id="@+id/addPlayerButton"
-                     android:background="@drawable/button_round"/>
     </LinearLayout>
 
 

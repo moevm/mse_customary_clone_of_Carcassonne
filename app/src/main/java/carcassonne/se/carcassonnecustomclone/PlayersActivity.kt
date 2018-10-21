@@ -55,11 +55,17 @@ class PlayersActivity : AppCompatActivity() {
         }
 
         addPlayerButton.setOnClickListener {
-            val newPlayer = ImageButton(this)
-            newPlayer.setImageResource(R.drawable.ic_info)
-            newPlayer.setBackgroundResource(R.drawable.button_round)
-            playerArea.addView(newPlayer)
+            addPlayer()
         }
+    }
+
+    /*Добавление нового игрока*/
+    private fun addPlayer() {
+        val newPlayer = ImageButton(this)
+        newPlayer.setImageResource(R.drawable.ic_player)
+        newPlayer.setBackgroundResource(R.drawable.button_round)
+        playerArea.addView(newPlayer)
+
     }
 }
 

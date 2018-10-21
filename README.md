@@ -1,1 +1,1 @@
-# Кастомный клон игры Каркассон
+# mse_customary_clone_of_Carcassonne

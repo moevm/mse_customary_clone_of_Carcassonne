@@ -1,12 +1,16 @@
 package carcassonne.se.carcassonnecustomclone
 
+import android.app.ActionBar
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.view.ContextThemeWrapper
 import android.view.View
+import android.view.ViewGroup
 import android.widget.ImageButton
+import android.widget.LinearLayout
 import kotlinx.android.synthetic.main.activity_players.*
 import java.util.*
 
@@ -65,6 +69,9 @@ class PlayersActivity : AppCompatActivity() {
     /*Добавляет кружок игрока в список*/
     fun addPlayerButton() {
         val newPlayer = ImageButton(this)
+        val params = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+        params.setMargins(10, 10, 10, 10)
+        newPlayer.layoutParams = params
         newPlayer.setImageResource(R.drawable.ic_player)
         newPlayer.setBackgroundResource(R.drawable.circle)
         val rnd = Random() // TODO: брать не рандомные цвета
@@ -87,6 +94,9 @@ class PlayersActivity : AppCompatActivity() {
     private fun addAddButton() {
         if(players.size < 6) {
             val newAddButton = ImageButton(this)
+            val params = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+            params.setMargins(10, 10, 10, 10)
+            newAddButton.layoutParams = params
             newAddButton.setImageResource(R.drawable.ic_add)
             newAddButton.setBackgroundResource(R.drawable.circle)
             newAddButton.id = R.id.addPlayerButton

@@ -49,7 +49,8 @@
     </style>
 
 
-    <style name="PlayerButton" parent="android:style/Widget.ImageButton">
-
+    <style name="PlayerButtonStyle" parent="android:style/Widget.ImageButton">
+        <item name="android:background">@drawable/circle</item>
+        <item name="android:layout_margin">10dp</item>
     </style>
 </resources>

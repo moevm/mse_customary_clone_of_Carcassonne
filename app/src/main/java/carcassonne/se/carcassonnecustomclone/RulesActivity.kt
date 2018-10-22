@@ -3,12 +3,14 @@ package carcassonne.se.carcassonnecustomclone
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import kotlinx.android.synthetic.main.activity_players.*
 
 class RulesActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_rules)
+        setButtonListeners()
     }
 
     override fun onResume() {
@@ -27,5 +29,11 @@ class RulesActivity : AppCompatActivity() {
                 // Hide the nav bar and status bar
                 or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                 or View.SYSTEM_UI_FLAG_FULLSCREEN)
+    }
+
+    fun setButtonListeners() {
+        backButton.setOnClickListener {
+            finish()
+        }
     }
 }

@@ -6,4 +6,5 @@
     <string name="button_back">Back</string>
     <string name="title_rules">Rules</string>
     <string name="title_info">About</string>
+    <string name="title_players">Choose players</string>
 </resources>

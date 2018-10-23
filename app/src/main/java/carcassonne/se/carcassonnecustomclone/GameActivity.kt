@@ -3,6 +3,7 @@ package carcassonne.se.carcassonnecustomclone
 
 import android.content.Context
 import android.graphics.*
+import android.graphics.drawable.Drawable
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -14,10 +15,126 @@ import kotlin.math.sin
 import kotlin.math.sqrt
 import kotlin.math.abs
 import android.view.MotionEvent
+import android.graphics.PixelFormat
+import android.graphics.ColorFilter
+import android.util.Log
+import android.R.attr.bitmap
+import android.opengl.ETC1.getHeight
+import android.opengl.ETC1.getWidth
+
+
+
+
+
+class Hexagon(X: Float, Y:Float, side: Float, roundColor: Int, patternBitmap: Bitmap, choosed: Boolean)
+{
+    var center: PointF
+    var sideLen: Float
+    private var mPath = Path()
+    private var mPaint = Paint(Paint.ANTI_ALIAS_FLAG)
+    private var isChoosed : Boolean = false
+    private var color : Int = 0
+    private var selfColor : Int
+    private var bitmap: Bitmap
+    init
+    {
+        center = PointF(X,Y)
+        sideLen = side
+        selfColor = roundColor
+        if(choosed)
+            choose()
+        else
+            unchoose()
+        bitmap = patternBitmap
+        mPath = getHexagonPath()
+
+    }
+
+    fun isChoosed() : Boolean
+    {
+        return isChoosed
+    }
+
+    fun choose()
+    {
+        isChoosed = true
+        mPaint.color = Color.TRANSPARENT
+    }
+
+    fun unchoose()
+    {
+        isChoosed = false
+        mPaint.color = selfColor
+    }
+
+    fun setColor(newColor: Int)
+    {
+        mPaint.color = color
+        selfColor = color
+
+    }
+
+    fun getColor() : Int
+    {
+        return mPaint.color
+    }
+
+    fun getOpacity(): Int {
+        return PixelFormat.TRANSLUCENT
+    }
+
+    private fun calcHexVertex(number: Int) : PointF
+    {
+        var angleDeg = 60 * number + 30
+        var angleRad = PI /180 * angleDeg
+        return PointF(
+            (center.x + sideLen * cos(angleRad)).toFloat(),
+            (center.y + sideLen * sin(angleRad).toFloat())
+        )
+    }
+
+    fun setColorFilter(colorFilter: ColorFilter?) {
+        mPaint.colorFilter = colorFilter
+    }
+
+    private fun getHexagonPath() : Path
+    {
+        mPath.reset()
+        mPath.moveTo(center.x, center.y + sideLen)
+        for(i in 0 .. 5)
+        {
+            var currVertex = calcHexVertex(i+1)
+            mPath.lineTo(currVertex.x, currVertex.y)
+        }
+        mPath.lineTo(center.x, center.y + sideLen)
+        mPath.close()
+        bitmap = Bitmap.createScaledBitmap(bitmap, (sideLen * sqrt(3f)).toInt(), (sideLen * 2).toInt(),false)
+        return mPath
+    }
+
+    fun onBoundsChange(bounds: Rect?) {
+
+    }
+
+
+    fun setAlpha(alpha: Int)
+    {
+        mPaint.setAlpha(alpha)
+    }
+
+
+    fun draw(canvas: Canvas)
+    {
+        canvas.drawPath(mPath, mPaint)
+        canvas.drawBitmap(bitmap, center.x-(bitmap.width/2), center.y-(bitmap.height/2) , mPaint)
+        //parent invalidate();
+
+    }
+
+}
 
 
 class GameActivity : AppCompatActivity() {
-
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,87 +148,8 @@ class GameActivity : AppCompatActivity() {
     class Canvass : View{
 
 
-        class Hexagon(X: Float, Y:Float, side: Float, roundColor: Int, choosed: Boolean)
-        {
-            var center: PointF
-            var sideLen: Float
-            var path = Path()
-            private var isChoosed : Boolean = false
-            private var color : Int = 0
-            private var selfColor : Int
 
-            init
-            {
-                center = PointF(X,Y)
-                sideLen = side
-                path = getHexagonPath()
-                selfColor = roundColor
-                if(choosed)
-                    choose()
-                else
-                    unchoose()
-            }
-
-            fun isChoosed() : Boolean
-            {
-                return isChoosed
-            }
-
-            fun choose()
-            {
-                isChoosed = true
-                color = Color.BLACK
-            }
-
-            fun unchoose()
-            {
-                isChoosed = false
-                color = selfColor
-            }
-
-            fun setColor(newColor: Int)
-            {
-                color = newColor
-                selfColor = color
-            }
-
-            fun getColor() : Int
-            {
-                return color
-            }
-
-            private fun calcHexVertex(number: Int) : PointF
-            {
-                var angleDeg = 60 * number + 30
-                var angleRad = PI /180 * angleDeg
-                return PointF(
-                    (center.x + sideLen * cos(angleRad)).toFloat(),
-                    (center.y + sideLen * sin(angleRad).toFloat())
-                )
-            }
-            private fun getHexagonPath() : Path
-            {
-                path.reset()
-                path.moveTo(center.x, center.y + sideLen)
-                for(i in 0 .. 5)
-                {
-                    var currVertex = calcHexVertex(i+1)
-                    path.lineTo(currVertex.x, currVertex.y)
-                }
-                path.lineTo(center.x, center.y + sideLen)
-                path.close()
-                return path
-            }
-
-
-            fun draw(canvas: Canvas, pincell: Paint)
-            {
-                canvas.drawPath(path, pincell)
-                //parent invalidate();
-            }
-
-        }
-        var side__ = 112f
+        var side__ = 360f
         var hexagonesList = ArrayList<Hexagon>(0)
         var shouldInit = true
         override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
@@ -128,9 +166,14 @@ class GameActivity : AppCompatActivity() {
 
                 var hexVertAlign = 3f / 2 * size
                 var hexHorizAlign = (sqrt(3f) / 2) * size
+                var bitmap = BitmapFactory.decodeResource(resources, R.drawable.testpls)
                 while ((center.y + hexVertAlign) < alto) {
                     while ((center.x + hexHorizAlign) < ancho) {
-                        hexagonesList.add(Hexagon(center.x, center.y, size, Color.argb(255, (Math.random() * 255).toInt(), (Math.random() * 255).toInt(), (Math.random() * 255).toInt()), true ))
+
+                        hexagonesList.add(Hexagon(center.x, center.y, size, Color.argb(255, (Math.random() * 255).toInt(),
+                            (Math.random() * 255).toInt(), (Math.random() * 255).toInt()), bitmap,
+                            true ))
+
                         center.x += (hexHorizAlign * 2) + 4
                         println(center)
                     }
@@ -228,16 +271,18 @@ class GameActivity : AppCompatActivity() {
             val roundPincell = Paint()
             roundPincell.setARGB(255,255,0,0)
             roundPincell.setStyle(Paint.Style.STROKE);
+            //center.set(center.x + hexHorizAlign, center.y + hexVertAlign)
+            //var bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.mygod)
+            //canvas.drawBitmap(bitmap, 100f, 100f, pincell)
+            //drawHex(center, size, pincell, canvas)
+
             for(elem in hexagonesList) {
                 pincell.color = elem.getColor()
-                elem.draw(canvas, pincell)
+                elem.draw(canvas)
                 //canvas.drawCircle(elem.center.x, elem.center.y, side__, roundPincell)
                 println(elem.sideLen)
             }
 
-            //center.set(center.x + hexHorizAlign, center.y + hexVertAlign)
-
-            //drawHex(center, size, pincell, canvas)
 
 
         }

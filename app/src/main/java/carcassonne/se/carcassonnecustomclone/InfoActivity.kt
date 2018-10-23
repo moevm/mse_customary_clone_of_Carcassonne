@@ -10,12 +10,12 @@ class InfoActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_info)
+        setButtonListeners()
     }
 
     override fun onResume() {
         super.onResume()
         setFullscreenMode()
-        setButtonListeners()
     }
 
 

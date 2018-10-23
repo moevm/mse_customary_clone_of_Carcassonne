@@ -2,15 +2,10 @@ package carcassonne.se.carcassonnecustomclone
 
 
 import android.content.Context
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Color.MAGENTA
-import android.graphics.Paint
-import android.graphics.PointF
+import android.graphics.*
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.support.annotation.ColorInt
 
 import android.view.View
 import kotlin.math.PI
@@ -19,15 +14,6 @@ import kotlin.math.sin
 import kotlin.math.sqrt
 import kotlin.math.abs
 import android.view.MotionEvent
-
-
-
-
-
-
-
-
-
 
 
 class GameActivity : AppCompatActivity() {
@@ -42,8 +28,6 @@ class GameActivity : AppCompatActivity() {
         layout1.addView(canvass)
     }
 
-
-
     class Canvass : View{
 
 
@@ -51,7 +35,7 @@ class GameActivity : AppCompatActivity() {
         {
             var center: PointF
             var sideLen: Float
-            var vertices: List<PointF>
+            var path = Path()
             private var isChoosed : Boolean = false
             private var color : Int = 0
             private var selfColor : Int
@@ -60,7 +44,7 @@ class GameActivity : AppCompatActivity() {
             {
                 center = PointF(X,Y)
                 sideLen = side
-                vertices = getVerticesCoords()
+                path = getHexagonPath()
                 selfColor = roundColor
                 if(choosed)
                     choose()
@@ -105,22 +89,24 @@ class GameActivity : AppCompatActivity() {
                     (center.y + sideLen * sin(angleRad).toFloat())
                 )
             }
-            private fun getVerticesCoords() : List<PointF>
+            private fun getHexagonPath() : Path
             {
-                var result = Array(6, {PointF(0f,0f)})
+                path.reset()
+                path.moveTo(center.x, center.y + sideLen)
                 for(i in 0 .. 5)
                 {
-                    result[i] = calcHexVertex(i)
+                    var currVertex = calcHexVertex(i+1)
+                    path.lineTo(currVertex.x, currVertex.y)
                 }
-                return result.toList()
+                path.lineTo(center.x, center.y + sideLen)
+                path.close()
+                return path
             }
 
 
             fun draw(canvas: Canvas, pincell: Paint)
             {
-                for (i in 1..5)
-                    canvas.drawLine(vertices[i - 1].x, vertices[i - 1].y, vertices[i].x, vertices[i].y, pincell)
-                canvas.drawLine(vertices[5].x, vertices[5].y, vertices[0].x, vertices[0].y, pincell)
+                canvas.drawPath(path, pincell)
                 //parent invalidate();
             }
 
@@ -160,6 +146,7 @@ class GameActivity : AppCompatActivity() {
                 }
                 shouldInit = false
             }
+            println("hello")
         }
 
         constructor(context: Context): super(context){
@@ -231,8 +218,9 @@ class GameActivity : AppCompatActivity() {
 
             return true
         }
-
+        var drawBackground = true
         override fun onDraw(canvas: Canvas) {
+
             canvas.drawRGB(0,0,0)
             val pincell = Paint()
             pincell.setStrokeWidth(4f)

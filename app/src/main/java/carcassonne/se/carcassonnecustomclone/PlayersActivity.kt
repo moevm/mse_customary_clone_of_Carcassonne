@@ -86,7 +86,7 @@ class PlayersActivity : AppCompatActivity() {
             }
         }
         playerArea.addView(newPlayer)
-        players.add("Player${players.size + 1}")
+        players.add("Player${players.size + 1}") // TODO: нормально собирать инфу и отправлять ее
     }
 
 

@@ -5,4 +5,5 @@
     <color name="colorAccent">#663300</color>
     <color name="colorBackground">#996633</color>
     <color name="colorMenuButton">#ffcc99</color>
+    <color name="colorMenuButtonPressed">#ddaa77</color>
 </resources>

@@ -1,10 +1,8 @@
 package carcassonne.se.carcassonnecustomclone
 
 import android.content.Intent
-import android.os.Build
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.support.annotation.RequiresApi
+import android.support.v7.app.AppCompatActivity
 import android.view.View
 import kotlinx.android.synthetic.main.activity_main_menu.*
 
@@ -37,7 +35,6 @@ class MainMenuActivity : AppCompatActivity() {
     }
 
 
-
     /*Устанавливает слушатели на кнопки меню*/
     private fun setButtonListeners() {
         playButton.setOnClickListener {
@@ -55,12 +52,12 @@ class MainMenuActivity : AppCompatActivity() {
             finish()
         }
 
-        settingsButton.setOnClickListener{
+        settingsButton.setOnClickListener {
             val openSettingsActivity = Intent(this, SettingsActivity::class.java)
             startActivity(openSettingsActivity)
         }
 
-        infoButton.setOnClickListener{
+        infoButton.setOnClickListener {
             val openInfoActivity = Intent(this, InfoActivity::class.java)
             startActivity(openInfoActivity)
         }

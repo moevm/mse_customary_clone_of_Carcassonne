@@ -136,6 +136,24 @@ class Hexagon(X: Float, Y:Float, side: Float, roundColor: Int, patternBitmap: Bi
 
 class GameActivity : AppCompatActivity() {
 
+    /*Set fullscreen mode*/
+    private fun setFullscreenMode() {
+        window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                // Set the content to appear under the system bars so that the
+                // content doesn't resize when the system bars hide and show.
+                or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                // Hide the nav bar and status bar
+                or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                or View.SYSTEM_UI_FLAG_FULLSCREEN)
+    }
+
+    override fun onResume()
+    {
+        super.onResume()
+        setFullscreenMode()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -149,7 +167,7 @@ class GameActivity : AppCompatActivity() {
 
 
 
-        var side__ = 360f
+        var side__ = 180f
         var hexagonesList = ArrayList<Hexagon>(0)
         var shouldInit = true
         override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {

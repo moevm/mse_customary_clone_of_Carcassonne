@@ -115,7 +115,6 @@
                  android:layout_height="wrap_content"
                  android:id="@+id/musicBar"
                  app:layout_constraintVertical_bias="0.7"
-
                  app:layout_constraintBottom_toBottomOf="@id/musicMinus"
                  app:layout_constraintLeft_toRightOf="@id/musicMinus"
                  app:layout_constraintRight_toLeftOf="@id/musicPlus"

@@ -3,7 +3,7 @@ package carcassonne.se.carcassonnecustomclone
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import kotlinx.android.synthetic.main.activity_players.*
+import kotlinx.android.synthetic.main.activity_settings.*
 
 class SettingsActivity : AppCompatActivity() {
 
@@ -11,6 +11,7 @@ class SettingsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
         setButtonListeners()
+        configureSettings()
     }
 
 
@@ -33,10 +34,31 @@ class SettingsActivity : AppCompatActivity() {
                 or View.SYSTEM_UI_FLAG_FULLSCREEN)
     }
 
+    //TODO: Сделать нормально
+    private fun configureSettings() {
+        effectsBar.max = 20
+        musicBar.max = 20
+        effectsBar.progress = 10
+        musicBar.progress = 10
+    }
+
 
     fun setButtonListeners() {
         backButton.setOnClickListener {
             finish()
+        }
+        effectsMinus.setOnClickListener {
+            effectsBar.progress--
+        }
+        effectsPlus.setOnClickListener {
+            effectsBar.progress++
+        }
+
+        musicMinus.setOnClickListener {
+            musicBar.progress--
+        }
+        musicPlus.setOnClickListener {
+            musicBar.progress++
         }
     }
 }

@@ -41,7 +41,7 @@ class GameActivity : AppCompatActivity() {
     }
 
     class Canvass : View {
-        var side__ = 180f
+        var side__ = 100f
         var hexagonesList = ArrayList<Hexagon>(0)
         var shouldInit = true
         override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {

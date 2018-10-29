@@ -10,6 +10,7 @@ class InfoActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_info)
+        setFullscreenMode()
         setButtonListeners()
     }
 
@@ -33,7 +34,7 @@ class InfoActivity : AppCompatActivity() {
     }
 
 
-    fun setButtonListeners() {
+    private fun setButtonListeners() {
         backButton.setOnClickListener {
             finish()
         }

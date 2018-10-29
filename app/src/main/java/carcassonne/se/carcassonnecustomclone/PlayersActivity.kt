@@ -60,6 +60,7 @@ class PlayersActivity : AppCompatActivity() {
     private fun addNewPlayer() {
         playerArea.removeView(findViewById(R.id.addPlayerButton))
         addPlayerButton()
+        setFullscreenMode()
         addAddButton()
     }
 

@@ -10,6 +10,7 @@ class RulesActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_rules)
+        setFullscreenMode()
         setButtonListeners()
     }
 
@@ -31,7 +32,7 @@ class RulesActivity : AppCompatActivity() {
                 or View.SYSTEM_UI_FLAG_FULLSCREEN)
     }
 
-    fun setButtonListeners() {
+    private fun setButtonListeners() {
         backButton.setOnClickListener {
             finish()
         }

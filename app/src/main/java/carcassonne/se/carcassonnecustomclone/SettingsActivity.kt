@@ -10,8 +10,9 @@ class SettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
+        setFullscreenMode()
         setButtonListeners()
-        configureSettings()
+        configureBars()
     }
 
 
@@ -35,7 +36,7 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     //TODO: Сделать нормально
-    private fun configureSettings() {
+    private fun configureBars() {
         effectsBar.max = 20
         musicBar.max = 20
         effectsBar.progress = 10
@@ -43,7 +44,7 @@ class SettingsActivity : AppCompatActivity() {
     }
 
 
-    fun setButtonListeners() {
+    private fun setButtonListeners() {
         backButton.setOnClickListener {
             finish()
         }

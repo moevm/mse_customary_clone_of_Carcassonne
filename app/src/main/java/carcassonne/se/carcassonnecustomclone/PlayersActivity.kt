@@ -4,12 +4,14 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import kotlinx.android.synthetic.main.activity_players.*
 import java.util.*
+
 
 class PlayersActivity : AppCompatActivity() {
 
@@ -67,21 +69,16 @@ class PlayersActivity : AppCompatActivity() {
     /*Добавляет кружок игрока в список*/
     fun addPlayerButton() {
         val newPlayer = ImageButton(this)
-        val params =
-            LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+        val params = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.WRAP_CONTENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT
+        )
         params.setMargins(10, 10, 10, 10)
         newPlayer.layoutParams = params
         newPlayer.setImageResource(R.drawable.ic_player)
         newPlayer.setBackgroundResource(R.drawable.circle)
-        val rnd = Random() // TODO: брать не рандомные цвета
-        (newPlayer.background as? GradientDrawable)?.setColor(
-            Color.argb(
-                255,
-                rnd.nextInt(256),
-                rnd.nextInt(256),
-                rnd.nextInt(256)
-            )
-        )
+        val arr = resources.getStringArray(R.array.PlayerColors)
+        (newPlayer.background as? GradientDrawable)?.setColor(Color.parseColor(resources.getStringArray(R.array.PlayerColors)[players.size]))
         newPlayer.setOnClickListener {
             if (players.size > 2) {
                 players.removeAt(players.lastIndex)
@@ -109,7 +106,12 @@ class PlayersActivity : AppCompatActivity() {
             newAddButton.setImageResource(R.drawable.ic_add)
             newAddButton.setBackgroundResource(R.drawable.circle)
             newAddButton.id = R.id.addPlayerButton
-            (newAddButton.background as? GradientDrawable)?.setColor(resources.getColor(R.color.colorMenuButton))
+            (newAddButton.background as? GradientDrawable)?.setColor(
+                ContextCompat.getColor(
+                    this,
+                    R.color.colorMenuButton
+                )
+            )
             newAddButton.setOnClickListener {
                 addNewPlayer()
             }

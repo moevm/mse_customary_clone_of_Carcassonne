@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="PlayerColors">
+        <item>#123456</item>
+        <item>#123451</item>
+        <item>#123452</item>
+        <item>#123453</item>
+        <item>#123454</item>
+        <item>#123455</item>
+    </string-array>
+</resources>

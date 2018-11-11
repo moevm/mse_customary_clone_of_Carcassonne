@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="PlayerColors">
-        <item>#123456</item>
-        <item>#123451</item>
-        <item>#123452</item>
-        <item>#123453</item>
-        <item>#123454</item>
-        <item>#123455</item>
+        <item>#b30000</item>
+        <item>#0052cc</item>
+        <item>#00994d</item>
+        <item>#e68a00</item>
+        <item>#990073</item>
+        <item>#e6e600</item>
     </string-array>
+
+
+
 </resources>

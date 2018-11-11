@@ -51,9 +51,8 @@
     </style>
 
 
-    <style name="PlayerButtonStyle" parent="android:style/Widget.ImageButton">
-        <item name="android:background">@drawable/circle</item>
-        <item name="android:scaleType">fitXY</item>
-        <item name="android:layout_margin">10dp</item>
+    <style name="PlayerName">
+        <item name="android:width">100dp</item>
+        <item name="android:fontFamily">@font/aclonica</item>
     </style>
 </resources>

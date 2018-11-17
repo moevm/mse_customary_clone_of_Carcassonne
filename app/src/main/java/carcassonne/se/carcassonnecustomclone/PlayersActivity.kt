@@ -9,7 +9,6 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.view.Gravity
-import android.view.View
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.LinearLayout
@@ -29,25 +28,13 @@ class PlayersActivity : AppCompatActivity() {
         addNewPlayer()
         addNewPlayer()
         setButtonListeners()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        setFullscreenMode()
+        setFullscreenMode(window)
     }
 
 
-    /*Set fullscreen mode*/
-    private fun setFullscreenMode() {
-        window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-                // Set the content to appear under the system bars so that the
-                // content doesn't resize when the system bars hide and show.
-                or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                // Hide the nav bar and status bar
-                or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                or View.SYSTEM_UI_FLAG_FULLSCREEN)
+    override fun onWindowFocusChanged(hasFocus: Boolean) {
+        super.onWindowFocusChanged(hasFocus)
+        setFullscreenMode(window)
     }
 
 
@@ -67,7 +54,6 @@ class PlayersActivity : AppCompatActivity() {
     private fun addNewPlayer() {
         playerIcons.removeView(findViewById(R.id.addPlayerButton))
         addPlayerButton()
-        setFullscreenMode()
         addAddButton()
         addPlayerName()
     }

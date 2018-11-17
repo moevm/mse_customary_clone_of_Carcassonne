@@ -1,25 +1,19 @@
 package carcassonne.se.carcassonnecustomclone
 
-import android.annotation.SuppressLint
 import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
-import android.os.Build
 import android.os.Bundle
-import android.support.annotation.RequiresApi
-import android.support.constraint.ConstraintLayout
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.view.Gravity
 import android.view.View
 import android.widget.EditText
-
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.TextView
-
 import kotlinx.android.synthetic.main.activity_players.*
 import java.util.*
 
@@ -79,6 +73,7 @@ class PlayersActivity : AppCompatActivity() {
     }
 
     private fun addPlayerName() {
+        //TODO: label
         val newPlayerName = TextView(this, null, R.style.PlayerName)
         val params = LinearLayout.LayoutParams(
             LinearLayout.LayoutParams.WRAP_CONTENT,
@@ -92,11 +87,13 @@ class PlayersActivity : AppCompatActivity() {
         //TODO: сделать нормальный диалог
         newPlayerName.setOnClickListener {
             val editText = EditText(this)
-            editText.setText("")
+            editText.setSingleLine(true)
+            //editText.imeOptions = EditorInfo.IME_ACTION_DONE
+            editText.setText("test")
             val alert = AlertDialog.Builder(this)
             alert.setView(editText)
-            alert.setPositiveButton("OK", DialogInterface.OnClickListener { dialog, which ->  })
-            alert.setNegativeButton("OK", DialogInterface.OnClickListener { dialog, which ->  })
+            alert.setPositiveButton("Ok", DialogInterface.OnClickListener { dialog, which -> })
+            alert.setNegativeButton("Back", DialogInterface.OnClickListener { dialog, which -> })
             alert.setTitle("Change player name")
             alert.show()
         }

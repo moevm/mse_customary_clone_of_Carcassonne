@@ -51,8 +51,8 @@
     </style>
 
 
-    <style name="PlayerName">
-        <item name="android:width">100dp</item>
+    <style name="PlayerName" parent="android:style/Widget.TextView">
+        <item name="android:width">200dp</item>
         <item name="android:fontFamily">@font/aclonica</item>
     </style>
 </resources>

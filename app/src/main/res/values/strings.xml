@@ -14,5 +14,8 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="exit_question">Do you really want to exit?</string>
+    <string name="name_change">Enter the new name</string>
+    <string name="cancel">Cancel</string>
+    <string name="ok">OK</string>
 
 </resources>

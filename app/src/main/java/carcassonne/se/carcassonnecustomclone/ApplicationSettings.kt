@@ -16,3 +16,4 @@ fun setFullscreenMode(window: Window?) {
             or View.SYSTEM_UI_FLAG_FULLSCREEN)
 }
 
+

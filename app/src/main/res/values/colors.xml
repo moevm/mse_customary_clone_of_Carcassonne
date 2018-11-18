@@ -6,4 +6,5 @@
     <color name="colorBackground">#aa7744</color>
     <color name="colorMenuButton">#ffcc99</color>
     <color name="colorMenuButtonPressed">#ddaa77</color>
+    <color name="colorModalDialog">#885522</color>
 </resources>

@@ -54,11 +54,10 @@ class MainMenuActivity : AppCompatActivity() {
     }
 
 
-
     private fun showExitDialog() {
-        val builder = ExitDialog()
-        builder.isCancelable = false
-        builder.show(supportFragmentManager, "ExitDialog")
+        val exitDialog = ExitDialog()
+        exitDialog.setParent(this)
+        exitDialog.show(supportFragmentManager, "ExitDialog")
     }
 }
 

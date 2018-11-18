@@ -1,15 +1,12 @@
 package carcassonne.se.carcassonnecustomclone
 
-import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
-import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.view.Gravity
-import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -19,7 +16,7 @@ import java.util.*
 
 class PlayersActivity : AppCompatActivity() {
 
-    var players: ArrayList<String> = ArrayList()
+    private var players: ArrayList<PlayerInfo> = ArrayList()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,43 +50,37 @@ class PlayersActivity : AppCompatActivity() {
     /*Добавление нового игрока*/
     private fun addNewPlayer() {
         playerIcons.removeView(findViewById(R.id.addPlayerButton))
-        addPlayerButton()
+        players.add(PlayerInfo(getNewPlayerName(), getNewPlayerColor()))
+        addPlayerViews(players.last())
         addAddButton()
-        addPlayerName()
     }
 
-    private fun addPlayerName() {
-        //TODO: label
-        val newPlayerName = TextView(this, null, R.style.PlayerName)
-        val params = LinearLayout.LayoutParams(
-            LinearLayout.LayoutParams.WRAP_CONTENT,
-            LinearLayout.LayoutParams.WRAP_CONTENT
-        )
-        params.setMargins(10, 10, 10, 10)
-        params.width = 300 //TODO: ширина
-        newPlayerName.layoutParams = params
-        newPlayerName.gravity = Gravity.CENTER_HORIZONTAL
-        newPlayerName.text = players[players.size - 1]
-        //TODO: сделать нормальный диалог
-        newPlayerName.setOnClickListener {
-            val editText = EditText(this)
-            editText.setSingleLine(true)
-            //editText.imeOptions = EditorInfo.IME_ACTION_DONE
-            editText.setText("test")
-            val alert = AlertDialog.Builder(this)
-            alert.setView(editText)
-            alert.setPositiveButton("Ok", DialogInterface.OnClickListener { dialog, which -> })
-            alert.setNegativeButton("Back", DialogInterface.OnClickListener { dialog, which -> })
-            alert.setTitle("Change player name")
-            alert.show()
+    //Цвет нового игрока
+    private fun getNewPlayerColor(): Int {
+        val colors = resources.getStringArray(R.array.PlayerColors)
+        for(i in 0 until colors.size) {
+            players.find {
+                it.color == Color.parseColor(colors[i])
+            } ?: return Color.parseColor(colors[i])
         }
-        playerNames.addView(newPlayerName)
+        return Color.GRAY
     }
 
-    //TODO: пофиксить выбор цветов
+    //Имя нового игрока
+    private fun getNewPlayerName(): String {
+        for(i in 1..6) {
+            val possibleName = "Player $i"
+            players.find {
+                it.name == possibleName
+            } ?: return possibleName
+        }
+        return "Player 0"
+    }
 
-    /*Добавляет иконку игрока в список*/
-    fun addPlayerButton() {
+
+
+    /*Добавляет иконку и имя игрока в список*/
+    private fun addPlayerViews(player: PlayerInfo) {
         val newPlayerIcon = ImageButton(this)
         val params = LinearLayout.LayoutParams(
             LinearLayout.LayoutParams.WRAP_CONTENT,
@@ -99,22 +90,38 @@ class PlayersActivity : AppCompatActivity() {
         newPlayerIcon.layoutParams = params
         newPlayerIcon.setImageResource(R.drawable.ic_player)
         newPlayerIcon.setBackgroundResource(R.drawable.circle)
-        (newPlayerIcon.background as? GradientDrawable)?.setColor(Color.parseColor(resources.getStringArray(R.array.PlayerColors)[players.size]))
+        (newPlayerIcon.background as? GradientDrawable)?.setColor(player.color)
+
+        val newPlayerName = TextView(this,null, 0, R.style.PlayerName)
+        params.width = dpToPx(100) //TODO: задавать это значение в ресурсах
+        newPlayerName.layoutParams = params
+        newPlayerName.gravity = Gravity.CENTER_HORIZONTAL
+        newPlayerName.text = player.name
+        newPlayerName.setOnClickListener {
+            val changeNameDialog = ChangeNameDialog()
+            changeNameDialog.show(supportFragmentManager, "ChangeNameDialog")
+        }
         newPlayerIcon.setOnClickListener {
             if (players.size > 2) {
-                players.removeAt(players.lastIndex)
+                players.remove(player)
                 playerIcons.removeView(newPlayerIcon)
+                playerNames.removeView(newPlayerName)
                 if (players.size == 5) {
                     addAddButton()
                 }
             }
         }
         playerIcons.addView(newPlayerIcon)
-        players.add("Player${players.size + 1}") // TODO: нормально собирать инфу и отправлять ее
+        playerNames.addView(newPlayerName)
+    }
+
+    private fun dpToPx(dp: Int): Int {
+        return (dp * resources.displayMetrics.density + 0.5f).toInt()
     }
 
 
-    /*Добавляет кнопку добавления нового игрока*/
+
+    /*Устанавливает кнопку добавления нового игрока*/
     private fun addAddButton() {
         if (players.size < 6) {
             val newAddButton = ImageButton(this)
@@ -139,6 +146,8 @@ class PlayersActivity : AppCompatActivity() {
             playerIcons.addView(newAddButton)
         }
     }
+
+
 }
 
 

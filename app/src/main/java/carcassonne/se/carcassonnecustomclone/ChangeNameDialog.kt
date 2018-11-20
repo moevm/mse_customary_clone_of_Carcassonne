@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import kotlinx.android.synthetic.main.change_name_dialog.*
+import kotlinx.android.synthetic.main.dialog_change_name.*
 
 class ChangeNameDialog : DialogFragment() {
     var nameField: TextView? = null
@@ -27,7 +27,7 @@ class ChangeNameDialog : DialogFragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.change_name_dialog, container)
+        return inflater.inflate(R.layout.dialog_change_name, container)
     }
 
     override fun onStart() {

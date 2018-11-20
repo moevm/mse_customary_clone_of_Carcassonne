@@ -120,7 +120,7 @@
 
 
     <Button style="@style/MenuButtonStyle"
-            android:text="@string/button_back"
+            android:text="@string/back"
             android:id="@+id/backButton"
             app:layout_constraintTop_toBottomOf="@id/settingsArea"
             app:layout_constraintLeft_toLeftOf="parent"

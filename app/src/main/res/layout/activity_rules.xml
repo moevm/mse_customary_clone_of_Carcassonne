@@ -24,7 +24,7 @@
               app:layout_constraintBottom_toTopOf="@id/backButton"/>
 
     <Button style="@style/MenuButtonStyle"
-            android:text="@string/button_back"
+            android:text="@string/back"
             android:id="@+id/backButton"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"

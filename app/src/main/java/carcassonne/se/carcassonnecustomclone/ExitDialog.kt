@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import kotlinx.android.synthetic.main.exit_dialog.*
 
 class ExitDialog : DialogFragment() {
-    private var parentActivity: AppCompatActivity? = null
+    var parentActivity: AppCompatActivity? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -27,7 +27,4 @@ class ExitDialog : DialogFragment() {
         return inflater.inflate(R.layout.exit_dialog, container)
     }
 
-    fun setParent(parent: AppCompatActivity) {
-        parentActivity = parent //TODO: исправить этот лютый костыль
-    }
 }

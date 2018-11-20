@@ -56,7 +56,7 @@ class MainMenuActivity : AppCompatActivity() {
 
     private fun showExitDialog() {
         val exitDialog = ExitDialog()
-        exitDialog.setParent(this)
+        exitDialog.parentActivity = this
         exitDialog.show(supportFragmentManager, "ExitDialog")
     }
 }

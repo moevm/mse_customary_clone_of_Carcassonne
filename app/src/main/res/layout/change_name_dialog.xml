@@ -24,6 +24,12 @@
               app:layout_constraintLeft_toLeftOf="parent"
               app:layout_constraintRight_toRightOf="parent"
               app:layout_constraintTop_toBottomOf="@id/titleText"
+              android:maxLines="1"
+              android:maxLength="12"
+              android:inputType="text"
+              android:imeOptions="flagNoExtractUi"
+              android:longClickable="false"
+              android:textSelectHandle="@drawable/empty"
     />
 
     <Button style="@style/MenuButtonStyle"

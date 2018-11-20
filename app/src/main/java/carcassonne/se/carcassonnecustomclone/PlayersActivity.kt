@@ -99,6 +99,8 @@ class PlayersActivity : AppCompatActivity() {
         newPlayerName.text = player.name
         newPlayerName.setOnClickListener {
             val changeNameDialog = ChangeNameDialog()
+            changeNameDialog.nameField = newPlayerName
+            changeNameDialog.player = player
             changeNameDialog.show(supportFragmentManager, "ChangeNameDialog")
         }
         newPlayerIcon.setOnClickListener {

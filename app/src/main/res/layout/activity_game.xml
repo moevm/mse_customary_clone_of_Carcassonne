@@ -14,4 +14,21 @@
             android:id="@+id/textView" app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent" android:layout_marginTop="544dp"
             android:layout_marginLeft="164dp" android:layout_marginStart="164dp"/>
+
+    <ImageButton android:layout_width="60dp"
+                 android:layout_height="60dp"
+                 app:srcCompat="@drawable/ic_menu"
+                 android:scaleType="fitXY"
+                 android:background="@drawable/button_rounded_corners"
+                 android:padding="10dp"
+                 android:layout_margin="10dp"
+                 app:layout_constraintRight_toRightOf="parent"
+                 app:layout_constraintTop_toTopOf="parent"
+    />
+
+    <ImageView android:layout_width="100dp"
+               android:layout_height="100dp"
+               
+    />
+
 </android.support.constraint.ConstraintLayout>

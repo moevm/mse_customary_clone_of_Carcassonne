@@ -1,13 +1,17 @@
 package carcassonne.se.carcassonnecustomclone
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
+import android.support.v7.app.AppCompatActivity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.dialog_pause.*
 
 class PauseDialog : DialogFragment() {
+
+    var parentActivity: AppCompatActivity? = null
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         isCancelable = false
@@ -16,19 +20,25 @@ class PauseDialog : DialogFragment() {
         }
 
         rulesButton.setOnClickListener {
-
+            val openRulesActivity = Intent(parentActivity, RulesActivity::class.java)
+            startActivity(openRulesActivity)
         }
-        
-        exitButton.setOnClickListener {
 
+        exitButton.setOnClickListener {
+            val openMainMenuActivity = Intent(parentActivity, MainMenuActivity::class.java)
+            openMainMenuActivity.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+            openMainMenuActivity.putExtra("EXIT", true)
+            startActivity(openMainMenuActivity)
         }
 
         settingsButton.setOnClickListener {
-
+            val openSettingsActivity = Intent(parentActivity, SettingsActivity::class.java)
+            startActivity(openSettingsActivity)
         }
 
         infoButton.setOnClickListener {
-
+            val openInfoActivity = Intent(parentActivity, InfoActivity::class.java)
+            startActivity(openInfoActivity)
         }
     }
 

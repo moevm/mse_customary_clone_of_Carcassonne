@@ -8,7 +8,6 @@ import android.support.constraint.ConstraintLayout
 import android.support.v7.app.AppCompatActivity
 import android.view.MotionEvent
 import android.view.View
-import android.widget.LinearLayout
 import kotlinx.android.synthetic.main.activity_game.*
 import kotlin.math.abs
 import kotlin.math.sqrt
@@ -16,7 +15,7 @@ import kotlin.math.sqrt
 
 class GameActivity : AppCompatActivity() {
 
-    private var players: ArrayList<PlayerInfo>? = null
+    var players: ArrayList<PlayerInfo>? = null
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)
@@ -32,41 +31,13 @@ class GameActivity : AppCompatActivity() {
         layout1.addView(canvass)
         setButtonListeners()
         players = intent.getParcelableArrayListExtra("players")
-        displayPlayers()
-        okButton.visibility = View.INVISIBLE
-        declineButton.visibility = View.INVISIBLE
-    }
-
-    private fun displayPlayers() {
         players?.forEach {
             addPlayer(it)
         }
     }
 
-    override fun onBackPressed() {
-        //super.onBackPressed()
-        //TODO: я вот совсем не уверен что так делать хорошо
-        showPauseDialog()
-    }
-
-    private fun addPlayer(playerInfo: PlayerInfo) {
-        val player = PlayerGameInfo(this, playerInfo)
-        //TODO: сделать чтобы растягивалось равномерно
-        val params = LinearLayout.LayoutParams(
-            LinearLayout.LayoutParams.WRAP_CONTENT,
-            LinearLayout.LayoutParams.WRAP_CONTENT
-        )
-        params.setMargins(0, 15, 0, 15)
-        player.layoutParams = params
-
-        playerInfoArea.addView(player)
-    }
-
-
-    private fun showPauseDialog() {
-        val pauseDialog = PauseDialog()
-        pauseDialog.parentActivity = this
-        pauseDialog.show(supportFragmentManager, "PauseDialog")
+    fun addPlayer(playerInfo: PlayerInfo) {
+        playerInfoArea.addView(PlayerGameInfo(this, playerInfo))
     }
 
     class Canvass : View {
@@ -223,19 +194,13 @@ class GameActivity : AppCompatActivity() {
 
     private fun setButtonListeners() {
         pauseButton.setOnClickListener {
-            showPauseDialog()
-        }
-        okButton.setOnClickListener {
-
-        }
-
-        declineButton.setOnClickListener {
-
+            val pauseDialog = PauseDialog()
+            pauseDialog.parentActivity = this
+            pauseDialog.show(supportFragmentManager, "PauseDialog")
         }
 
         remainingTiles.setOnClickListener {
             val tilesDialog = TilesDialog()
-            tilesDialog.parentActivity = this
             tilesDialog.show(supportFragmentManager, "TilesDialog")
         }
     }

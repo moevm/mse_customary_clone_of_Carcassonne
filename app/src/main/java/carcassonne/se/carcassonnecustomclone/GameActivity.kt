@@ -35,7 +35,7 @@ class GameActivity : AppCompatActivity() {
     }
 
     class Canvass : View {
-        var side__ = 180f
+        var side__ = 100f
         var hexagonesList = ArrayList<Hexagon>(0)
         var shouldInit = true
         override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
@@ -131,10 +131,10 @@ class GameActivity : AppCompatActivity() {
                 MotionEvent.ACTION_DOWN -> {
                     var res = getIndexHexOnTap(PointF(event.x, event.y), side__)
                     if (res != -1)
-                        if (!hexagonesList[res].isChosen())
+//                        if (!hexagonesList[res].isChosen())
                             hexagonesList[res].choose()
-                        else
-                            hexagonesList[res].cancel()
+//                        else
+//                            hexagonesList[res].cancel()
                     invalidate()
                     //hexagonesList.add(Hexagon(event.x, event.y, side__, Color.MAGENTA))
                     //println(hexagonesList.last())

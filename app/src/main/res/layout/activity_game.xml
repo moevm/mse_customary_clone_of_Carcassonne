@@ -54,10 +54,37 @@
 
 
     <LinearLayout android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
+                  android:layout_height="0dp"
                   android:id="@+id/playerInfoArea"
                   android:orientation="vertical"
                   android:elevation="10dp"
+    />
+
+
+
+    <ImageButton android:layout_width="100dp"
+                 android:layout_height="100dp"
+                 android:id="@+id/okButton"
+                 app:srcCompat="@drawable/ic_ok"
+                 android:scaleType="fitXY"
+                 android:background="@drawable/button_rounded_corners_green"
+                 android:padding="10dp"
+                 android:layout_margin="10dp"
+                 app:layout_constraintRight_toRightOf="parent"
+                 app:layout_constraintBottom_toBottomOf="parent"
+                 android:elevation="10dp"
+    />
+
+    <ImageButton android:layout_width="60dp"
+                 android:layout_height="50dp"
+                 app:srcCompat = "@drawable/ic_close"
+                 android:scaleType="fitXY"
+                 android:id="@+id/declineButton"
+                 android:background="@drawable/button_rounded_corners_red"
+                 android:layout_margin="10dp"
+                 android:elevation="10dp"
+                 app:layout_constraintBottom_toTopOf="@id/okButton"
+                 app:layout_constraintRight_toRightOf="parent"
     />
 
 

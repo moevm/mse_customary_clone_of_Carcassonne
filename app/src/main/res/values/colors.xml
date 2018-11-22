@@ -7,4 +7,8 @@
     <color name="colorMenuButton">#ffcc99</color>
     <color name="colorMenuButtonPressed">#ddaa77</color>
     <color name="colorModalDialog">#885522</color>
+    <color name="colorGreenButton">#33cc33</color>
+    <color name="colorGreenButtonPressed">#29a329</color>
+    <color name="colorRedButton">#e60000</color>
+    <color name="colorRedButtonPressed">#b30000</color>
 </resources>

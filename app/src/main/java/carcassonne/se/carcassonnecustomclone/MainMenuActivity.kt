@@ -53,7 +53,6 @@ class MainMenuActivity : AppCompatActivity() {
         }
     }
 
-
     private fun showExitDialog() {
         val exitDialog = ExitDialog()
         exitDialog.parentActivity = this

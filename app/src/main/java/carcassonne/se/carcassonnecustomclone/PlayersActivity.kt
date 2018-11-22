@@ -38,8 +38,9 @@ class PlayersActivity : AppCompatActivity() {
     /*Устанавливает слушатели на кнопки меню*/
     private fun setButtonListeners() {
         playButton.setOnClickListener {
-            val play = Intent(this, GameActivity::class.java)
-            startActivity(play)
+            val openGameActivity = Intent(this, GameActivity::class.java)
+            openGameActivity.putParcelableArrayListExtra("players", players)
+            startActivity(openGameActivity)
         }
 
         backButton.setOnClickListener {

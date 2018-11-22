@@ -29,6 +29,8 @@ class PauseDialog : DialogFragment() {
             openMainMenuActivity.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
             openMainMenuActivity.putExtra("EXIT", true)
             startActivity(openMainMenuActivity)
+            //TODO: возможно тут же стоит закрывать окно игры, но я не уверен что это правильно
+            //TODO: подтверждение выхода
         }
 
         settingsButton.setOnClickListener {
@@ -41,6 +43,7 @@ class PauseDialog : DialogFragment() {
             startActivity(openInfoActivity)
         }
     }
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.dialog_pause, container)

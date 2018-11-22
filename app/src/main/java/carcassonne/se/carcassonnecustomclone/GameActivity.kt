@@ -8,14 +8,18 @@ import android.support.constraint.ConstraintLayout
 import android.support.v7.app.AppCompatActivity
 import android.view.MotionEvent
 import android.view.View
-import kotlinx.android.synthetic.main.activity_game.*
 import kotlin.math.abs
 import kotlin.math.sqrt
 
 
 class GameActivity : AppCompatActivity() {
 
-    var players: ArrayList<PlayerInfo>? = null
+
+    override fun onResume() {
+        super.onResume()
+        setFullscreenMode(window)
+    }
+
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)
@@ -24,20 +28,10 @@ class GameActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setFullscreenMode(window)
         setContentView(R.layout.activity_game)
         val layout1 = findViewById(R.id.layout1) as ConstraintLayout
         val canvass = Canvass(this)
         layout1.addView(canvass)
-        setButtonListeners()
-        players = intent.getParcelableArrayListExtra("players")
-        players?.forEach {
-            addPlayer(it)
-        }
-    }
-
-    fun addPlayer(playerInfo: PlayerInfo) {
-        playerInfoArea.addView(PlayerGameInfo(this, playerInfo))
     }
 
     class Canvass : View {
@@ -189,19 +183,6 @@ class GameActivity : AppCompatActivity() {
                 //canvas.drawCircle(elem.center.x, elem.center.y, side__, roundPincell)
                 println(elem.sideLen)
             }
-        }
-    }
-
-    private fun setButtonListeners() {
-        pauseButton.setOnClickListener {
-            val pauseDialog = PauseDialog()
-            pauseDialog.parentActivity = this
-            pauseDialog.show(supportFragmentManager, "PauseDialog")
-        }
-
-        remainingTiles.setOnClickListener {
-            val tilesDialog = TilesDialog()
-            tilesDialog.show(supportFragmentManager, "TilesDialog")
         }
     }
 }

@@ -35,7 +35,7 @@ class GameActivity : AppCompatActivity() {
     }
 
     class Canvass : View {
-        var side__ = 100f
+        var side__ = 180f
         var hexagonesList = ArrayList<Hexagon>(0)
         var shouldInit = true
         override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
@@ -52,9 +52,21 @@ class GameActivity : AppCompatActivity() {
 
                 var hexVertAlign = 3f / 2 * size
                 var hexHorizAlign = (sqrt(3f) / 2) * size
-                var bitmap = BitmapFactory.decodeResource(resources, R.drawable.testpls)
+                var bitmap1 = BitmapFactory.decodeResource(resources, R.drawable.castle1)
+                var bitmap2 = BitmapFactory.decodeResource(resources, R.drawable.wall1)
+                var bitmap3 = BitmapFactory.decodeResource(resources, R.drawable.wall2)
+                var bitmap4 = BitmapFactory.decodeResource(resources, R.drawable.wall3)
+                var bitmap5 = BitmapFactory.decodeResource(resources, R.drawable.wall4)
                 while ((center.y + hexVertAlign) < alto) {
                     while ((center.x + hexHorizAlign) < ancho) {
+                        var bitmap : Bitmap = when((Math.random() * ((4 + 1) - 0) + 0).toInt()) {
+                            0-> bitmap1
+                            1-> bitmap2
+                            2-> bitmap3
+                            3-> bitmap4
+                            4-> bitmap5
+                            else-> bitmap1
+                        }
                         hexagonesList.add(
                             Hexagon(
                                 center.x, center.y, size, Color.argb(

@@ -120,6 +120,7 @@ class Hexagon(X: Float, Y: Float, side: Float, roundColor: Int, patternBitmap: B
     fun draw(canvas: Canvas) {
         canvas.drawPath(mPath, mPaint)
         canvas.drawBitmap(bitmap, center.x - (bitmap.width / 2), center.y - (bitmap.height / 2), mPaint)
+        //canvas.drawCircle( center.x - (realBitmap.width / 2), center.y - (realBitmap.height / 2), sideLen/10,mPaint)
         //parent invalidate();
 
     }

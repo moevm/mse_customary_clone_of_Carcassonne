@@ -25,13 +25,13 @@ class PlayersActivity : AppCompatActivity() {
         addNewPlayer()
         addNewPlayer()
         setButtonListeners()
-        setFullscreenMode(window)
+        hideSystemUI(window)
     }
 
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)
-        setFullscreenMode(window)
+        hideSystemUI(window)
     }
 
 

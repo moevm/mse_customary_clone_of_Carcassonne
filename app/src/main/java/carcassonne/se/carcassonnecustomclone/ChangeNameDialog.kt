@@ -14,6 +14,9 @@ class ChangeNameDialog : DialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        activity?.window?.decorView?.setOnSystemUiVisibilityChangeListener {
+            hideSystemUI(activity?.window)
+        }
         okButton.setOnClickListener {
             if(newName.text.isNotEmpty()) {
                 nameField?.text = newName.text
@@ -27,6 +30,7 @@ class ChangeNameDialog : DialogFragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        hideDialogSystemUI(dialog, activity)
         return inflater.inflate(R.layout.dialog_change_name, container)
     }
 

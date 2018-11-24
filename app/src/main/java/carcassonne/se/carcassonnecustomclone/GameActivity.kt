@@ -20,12 +20,12 @@ class GameActivity : AppCompatActivity() {
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)
-        setFullscreenMode(window)
+        hideSystemUI(window)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setFullscreenMode(window)
+        hideSystemUI(window)
         setContentView(R.layout.activity_game)
         val layout1 = findViewById(R.id.layout1) as ConstraintLayout
         val canvass = Canvass(this)
@@ -65,7 +65,7 @@ class GameActivity : AppCompatActivity() {
 
     private fun showPauseDialog() {
         val pauseDialog = PauseDialog()
-        pauseDialog.parentActivity = this
+        //pauseDialog.parentActivity = this
         pauseDialog.show(supportFragmentManager, "PauseDialog")
     }
 
@@ -235,7 +235,6 @@ class GameActivity : AppCompatActivity() {
 
         remainingTiles.setOnClickListener {
             val tilesDialog = TilesDialog()
-            tilesDialog.parentActivity = this
             tilesDialog.show(supportFragmentManager, "TilesDialog")
         }
     }

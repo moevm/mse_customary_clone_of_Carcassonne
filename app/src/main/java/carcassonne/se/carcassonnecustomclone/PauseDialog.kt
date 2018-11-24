@@ -11,7 +11,7 @@ import kotlinx.android.synthetic.main.dialog_pause.*
 
 class PauseDialog : DialogFragment() {
 
-    var parentActivity: AppCompatActivity? = null
+    //var parentActivity: AppCompatActivity? = null
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         isCancelable = false
@@ -20,32 +20,29 @@ class PauseDialog : DialogFragment() {
         }
 
         rulesButton.setOnClickListener {
-            val openRulesActivity = Intent(parentActivity, RulesActivity::class.java)
+            val openRulesActivity = Intent(activity, RulesActivity::class.java)
             startActivity(openRulesActivity)
         }
 
         exitButton.setOnClickListener {
-            val openMainMenuActivity = Intent(parentActivity, MainMenuActivity::class.java)
-            openMainMenuActivity.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
-            openMainMenuActivity.putExtra("EXIT", true)
-            startActivity(openMainMenuActivity)
-            //TODO: возможно тут же стоит закрывать окно игры, но я не уверен что это правильно
-            //TODO: подтверждение выхода
+            val exitDialog = GameExitDialog()
+            exitDialog.show(activity?.supportFragmentManager, "GameExitDialog")
         }
 
         settingsButton.setOnClickListener {
-            val openSettingsActivity = Intent(parentActivity, SettingsActivity::class.java)
+            val openSettingsActivity = Intent(activity, SettingsActivity::class.java)
             startActivity(openSettingsActivity)
         }
 
         infoButton.setOnClickListener {
-            val openInfoActivity = Intent(parentActivity, InfoActivity::class.java)
+            val openInfoActivity = Intent(activity, InfoActivity::class.java)
             startActivity(openInfoActivity)
         }
     }
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        hideDialogSystemUI(dialog, activity)
         return inflater.inflate(R.layout.dialog_pause, container)
     }
 }

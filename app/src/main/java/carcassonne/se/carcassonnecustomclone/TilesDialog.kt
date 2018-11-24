@@ -14,7 +14,6 @@ import kotlinx.android.synthetic.main.dialog_tiles.*
 
 class TilesDialog : DialogFragment() {
 
-    var parentActivity: AppCompatActivity? = null
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         isCancelable = false
@@ -23,20 +22,20 @@ class TilesDialog : DialogFragment() {
         }
 
         for (i in 1..10) {
-            val tileRow = TableRow(parentActivity)
+            val tileRow = TableRow(activity)
             val params = TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT)
             tileRow.layoutParams = params
-            val countRow = TableRow(parentActivity)
+            val countRow = TableRow(activity)
             countRow.layoutParams = params
             for(j in 1..4) {
-                val tile = ImageView(parentActivity)
+                val tile = ImageView(activity)
                 tile.setImageResource(R.drawable.castle1)
                 val imageParams = TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT)
                 imageParams.width = dpToPx(100)
                 imageParams.height = dpToPx(100)
                 tile.layoutParams = imageParams
                 tileRow.addView(tile)
-                val count = TextView(parentActivity, null, 0, R.style.PlayerName)
+                val count = TextView(activity, null, 0, R.style.PlayerName)
                 count.text = "2/3"
                 count.gravity = Gravity.CENTER_HORIZONTAL
                 val countParams = TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT)
@@ -45,6 +44,7 @@ class TilesDialog : DialogFragment() {
             }
             tiles.addView(tileRow, params)
             tiles.addView(countRow, params)
+            //TODO: все значения задавать в ресурсах а не хардкодить
         }
     }
 
@@ -53,6 +53,7 @@ class TilesDialog : DialogFragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        hideDialogSystemUI(dialog, activity)
         return inflater.inflate(R.layout.dialog_tiles, container)
     }
 }

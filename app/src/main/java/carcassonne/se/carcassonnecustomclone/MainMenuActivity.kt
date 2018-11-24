@@ -11,7 +11,7 @@ class MainMenuActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main_menu)
         setButtonListeners()
-        setFullscreenMode(window)
+        hideSystemUI(window)
     }
 
     override fun onBackPressed() {
@@ -22,7 +22,7 @@ class MainMenuActivity : AppCompatActivity() {
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)
-        setFullscreenMode(window)
+        hideSystemUI(window)
     }
 
 
@@ -55,7 +55,6 @@ class MainMenuActivity : AppCompatActivity() {
 
     private fun showExitDialog() {
         val exitDialog = ExitDialog()
-        exitDialog.parentActivity = this
         exitDialog.show(supportFragmentManager, "ExitDialog")
     }
 }

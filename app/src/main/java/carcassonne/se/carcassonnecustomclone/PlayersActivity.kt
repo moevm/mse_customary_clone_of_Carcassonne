@@ -25,21 +25,22 @@ class PlayersActivity : AppCompatActivity() {
         addNewPlayer()
         addNewPlayer()
         setButtonListeners()
-        setFullscreenMode(window)
+        hideSystemUI(window)
     }
 
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)
-        setFullscreenMode(window)
+        hideSystemUI(window)
     }
 
 
     /*Устанавливает слушатели на кнопки меню*/
     private fun setButtonListeners() {
         playButton.setOnClickListener {
-            val play = Intent(this, GameActivity::class.java)
-            startActivity(play)
+            val openGameActivity = Intent(this, GameActivity::class.java)
+            openGameActivity.putParcelableArrayListExtra("players", players)
+            startActivity(openGameActivity)
         }
 
         backButton.setOnClickListener {

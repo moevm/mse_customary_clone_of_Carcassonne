@@ -8,40 +8,69 @@ import android.support.constraint.ConstraintLayout
 import android.support.v7.app.AppCompatActivity
 import android.view.MotionEvent
 import android.view.View
+import android.widget.LinearLayout
+import kotlinx.android.synthetic.main.activity_game.*
 import kotlin.math.abs
 import kotlin.math.sqrt
 
 
 class GameActivity : AppCompatActivity() {
 
-    /*Set fullscreen mode*/
-    private fun setFullscreenMode() {
-        window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-                // Set the content to appear under the system bars so that the
-                // content doesn't resize when the system bars hide and show.
-                or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                // Hide the nav bar and status bar
-                or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                or View.SYSTEM_UI_FLAG_FULLSCREEN)
-    }
+    private var players: ArrayList<PlayerInfo>? = null
 
-    override fun onResume() {
-        super.onResume()
-        setFullscreenMode()
+    override fun onWindowFocusChanged(hasFocus: Boolean) {
+        super.onWindowFocusChanged(hasFocus)
+        hideSystemUI(window)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        hideSystemUI(window)
         setContentView(R.layout.activity_game)
         val layout1 = findViewById(R.id.layout1) as ConstraintLayout
         val canvass = Canvass(this)
         layout1.addView(canvass)
+        setButtonListeners()
+        players = intent.getParcelableArrayListExtra("players")
+        displayPlayers()
+        okButton.visibility = View.INVISIBLE
+        declineButton.visibility = View.INVISIBLE
+    }
+
+    private fun displayPlayers() {
+        players?.forEach {
+            addPlayer(it)
+        }
+    }
+
+    override fun onBackPressed() {
+        //super.onBackPressed()
+        //TODO: я вот совсем не уверен что так делать хорошо
+        showPauseDialog()
+    }
+
+    private fun addPlayer(playerInfo: PlayerInfo) {
+        val player = PlayerGameInfo(this, playerInfo)
+        //TODO: сделать чтобы растягивалось равномерно
+        val params = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.WRAP_CONTENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT
+        )
+        params.setMargins(0, 15, 0, 15)
+        player.layoutParams = params
+
+        playerInfoArea.addView(player)
+    }
+
+
+    private fun showPauseDialog() {
+        val pauseDialog = PauseDialog()
+        //pauseDialog.parentActivity = this
+        pauseDialog.show(supportFragmentManager, "PauseDialog")
     }
 
     class Canvass : View {
-        var side__ = 180f
+        var side__ = 140f
         var hexagonesList = ArrayList<Hexagon>(0)
         var shouldInit = true
         override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
@@ -58,9 +87,37 @@ class GameActivity : AppCompatActivity() {
 
                 var hexVertAlign = 3f / 2 * size
                 var hexHorizAlign = (sqrt(3f) / 2) * size
-                var bitmap = BitmapFactory.decodeResource(resources, R.drawable.testpls)
+                var bitmap1 = BitmapFactory.decodeResource(resources, R.drawable.wall1)
+                var bitmap2 = BitmapFactory.decodeResource(resources, R.drawable.wall2)
+                var bitmap3 = BitmapFactory.decodeResource(resources, R.drawable.wall3)
+                var bitmap4 = BitmapFactory.decodeResource(resources, R.drawable.wall4)
+                var bitmap5 = BitmapFactory.decodeResource(resources, R.drawable.wall5)
+                var bitmap6 = BitmapFactory.decodeResource(resources, R.drawable.castle1)
+                var bitmap7 = BitmapFactory.decodeResource(resources, R.drawable.castle2)
+                var bitmap8 = BitmapFactory.decodeResource(resources, R.drawable.castle3)
+                var bitmap9 = BitmapFactory.decodeResource(resources, R.drawable.castle4)
+                var bitmap10 = BitmapFactory.decodeResource(resources, R.drawable.castle5)
+                var bitmap11 = BitmapFactory.decodeResource(resources, R.drawable.cityblock1)
+                var bitmap12 = BitmapFactory.decodeResource(resources, R.drawable.cityblock2)
+                var bitmap13 = BitmapFactory.decodeResource(resources, R.drawable.cityblock3)
                 while ((center.y + hexVertAlign) < alto) {
                     while ((center.x + hexHorizAlign) < ancho) {
+                        var bitmap : Bitmap = when((Math.random() * ((14 + 1) - 0) + 0).toInt()) {
+                            0-> bitmap1
+                            1-> bitmap2
+                            2-> bitmap3
+                            3-> bitmap4
+                            4-> bitmap5
+                            5-> bitmap6
+                            6-> bitmap7
+                            7-> bitmap8
+                            8-> bitmap9
+                            9-> bitmap10
+                            10-> bitmap11
+                            11-> bitmap12
+                            12-> bitmap13
+                            else-> bitmap12
+                        }
                         hexagonesList.add(
                             Hexagon(
                                 center.x, center.y, size, Color.argb(
@@ -137,10 +194,10 @@ class GameActivity : AppCompatActivity() {
                 MotionEvent.ACTION_DOWN -> {
                     var res = getIndexHexOnTap(PointF(event.x, event.y), side__)
                     if (res != -1)
-                        if (!hexagonesList[res].isChosen())
+//                        if (!hexagonesList[res].isChosen())
                             hexagonesList[res].choose()
-                        else
-                            hexagonesList[res].cancel()
+//                        else
+//                            hexagonesList[res].cancel()
                     invalidate()
                     //hexagonesList.add(Hexagon(event.x, event.y, side__, Color.MAGENTA))
                     //println(hexagonesList.last())
@@ -177,6 +234,24 @@ class GameActivity : AppCompatActivity() {
                 //canvas.drawCircle(elem.center.x, elem.center.y, side__, roundPincell)
                 println(elem.sideLen)
             }
+        }
+    }
+
+    private fun setButtonListeners() {
+        pauseButton.setOnClickListener {
+            showPauseDialog()
+        }
+        okButton.setOnClickListener {
+
+        }
+
+        declineButton.setOnClickListener {
+
+        }
+
+        remainingTiles.setOnClickListener {
+            val tilesDialog = TilesDialog()
+            tilesDialog.show(supportFragmentManager, "TilesDialog")
         }
     }
 }

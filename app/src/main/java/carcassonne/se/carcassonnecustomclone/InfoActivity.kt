@@ -10,12 +10,12 @@ class InfoActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_info)
         setButtonListeners()
-        setFullscreenMode(window)
+        hideSystemUI(window)
     }
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)
-        setFullscreenMode(window)
+        hideSystemUI(window)
     }
 
 

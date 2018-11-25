@@ -70,7 +70,7 @@ class GameActivity : AppCompatActivity() {
     }
 
     class Canvass : View {
-        var side__ = 180f
+        var side__ = 140f
         var hexagonesList = ArrayList<Hexagon>(0)
         var shouldInit = true
         override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
@@ -87,20 +87,36 @@ class GameActivity : AppCompatActivity() {
 
                 var hexVertAlign = 3f / 2 * size
                 var hexHorizAlign = (sqrt(3f) / 2) * size
-                var bitmap1 = BitmapFactory.decodeResource(resources, R.drawable.castle1)
-                var bitmap2 = BitmapFactory.decodeResource(resources, R.drawable.wall1)
-                var bitmap3 = BitmapFactory.decodeResource(resources, R.drawable.wall2)
-                var bitmap4 = BitmapFactory.decodeResource(resources, R.drawable.wall3)
-                var bitmap5 = BitmapFactory.decodeResource(resources, R.drawable.wall4)
+                var bitmap1 = BitmapFactory.decodeResource(resources, R.drawable.wall1)
+                var bitmap2 = BitmapFactory.decodeResource(resources, R.drawable.wall2)
+                var bitmap3 = BitmapFactory.decodeResource(resources, R.drawable.wall3)
+                var bitmap4 = BitmapFactory.decodeResource(resources, R.drawable.wall4)
+                var bitmap5 = BitmapFactory.decodeResource(resources, R.drawable.wall5)
+                var bitmap6 = BitmapFactory.decodeResource(resources, R.drawable.castle1)
+                var bitmap7 = BitmapFactory.decodeResource(resources, R.drawable.castle2)
+                var bitmap8 = BitmapFactory.decodeResource(resources, R.drawable.castle3)
+                var bitmap9 = BitmapFactory.decodeResource(resources, R.drawable.castle4)
+                var bitmap10 = BitmapFactory.decodeResource(resources, R.drawable.castle5)
+                var bitmap11 = BitmapFactory.decodeResource(resources, R.drawable.cityblock1)
+                var bitmap12 = BitmapFactory.decodeResource(resources, R.drawable.cityblock2)
+                var bitmap13 = BitmapFactory.decodeResource(resources, R.drawable.cityblock3)
                 while ((center.y + hexVertAlign) < alto) {
                     while ((center.x + hexHorizAlign) < ancho) {
-                        var bitmap : Bitmap = when((Math.random() * ((4 + 1) - 0) + 0).toInt()) {
+                        var bitmap : Bitmap = when((Math.random() * ((14 + 1) - 0) + 0).toInt()) {
                             0-> bitmap1
                             1-> bitmap2
                             2-> bitmap3
                             3-> bitmap4
                             4-> bitmap5
-                            else-> bitmap1
+                            5-> bitmap6
+                            6-> bitmap7
+                            7-> bitmap8
+                            8-> bitmap9
+                            9-> bitmap10
+                            10-> bitmap11
+                            11-> bitmap12
+                            12-> bitmap13
+                            else-> bitmap12
                         }
                         hexagonesList.add(
                             Hexagon(

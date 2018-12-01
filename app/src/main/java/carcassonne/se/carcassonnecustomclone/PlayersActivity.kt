@@ -118,11 +118,10 @@ class PlayersActivity : AppCompatActivity() {
         playerNames.addView(newPlayerName)
     }
 
+
     private fun dpToPx(dp: Int): Int {
         return (dp * resources.displayMetrics.density + 0.5f).toInt()
     }
-
-
 
     /*Устанавливает кнопку добавления нового игрока*/
     private fun addAddButton() {

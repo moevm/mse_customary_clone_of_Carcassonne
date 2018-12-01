@@ -6,6 +6,7 @@ import android.graphics.*
 import android.os.Bundle
 import android.support.constraint.ConstraintLayout
 import android.support.v7.app.AppCompatActivity
+import android.util.DisplayMetrics
 import android.view.MotionEvent
 import android.view.View
 import android.widget.LinearLayout
@@ -35,8 +36,10 @@ class GameActivity : AppCompatActivity() {
         displayPlayers()
         okButton.visibility = View.INVISIBLE
         declineButton.visibility = View.INVISIBLE
+        //TODO: нужно запилить методы для отображения этих кнопочек
     }
 
+    /*Добавляет игроков на панель игроков слева*/
     private fun displayPlayers() {
         players?.forEach {
             addPlayer(it)
@@ -51,21 +54,32 @@ class GameActivity : AppCompatActivity() {
 
     private fun addPlayer(playerInfo: PlayerInfo) {
         val player = PlayerGameInfo(this, playerInfo)
-        //TODO: сделать чтобы растягивалось равномерно
+        val dm = DisplayMetrics()
+        windowManager.defaultDisplay.getMetrics(dm)
+        val displayHeight = dm.heightPixels
+        val margin = pxToDp((displayHeight - dpToPx(50) * 6) / 7)
+        //TODO: ресурсы опять же
         val params = LinearLayout.LayoutParams(
             LinearLayout.LayoutParams.WRAP_CONTENT,
             LinearLayout.LayoutParams.WRAP_CONTENT
         )
-        params.setMargins(0, 15, 0, 15)
+        params.setMargins(0, 2 * margin, 0, 0)
         player.layoutParams = params
-
         playerInfoArea.addView(player)
+    }
+
+
+    private fun pxToDp(px: Int): Int {
+        return (px / resources.displayMetrics.density + 0.5f).toInt()
+    }
+
+    private fun dpToPx(dp: Int): Int {
+        return (dp * resources.displayMetrics.density).toInt()
     }
 
 
     private fun showPauseDialog() {
         val pauseDialog = PauseDialog()
-        //pauseDialog.parentActivity = this
         pauseDialog.show(supportFragmentManager, "PauseDialog")
     }
 
@@ -102,21 +116,21 @@ class GameActivity : AppCompatActivity() {
                 var bitmap13 = BitmapFactory.decodeResource(resources, R.drawable.cityblock3)
                 while ((center.y + hexVertAlign) < alto) {
                     while ((center.x + hexHorizAlign) < ancho) {
-                        var bitmap : Bitmap = when((Math.random() * ((14 + 1) - 0) + 0).toInt()) {
-                            0-> bitmap1
-                            1-> bitmap2
-                            2-> bitmap3
-                            3-> bitmap4
-                            4-> bitmap5
-                            5-> bitmap6
-                            6-> bitmap7
-                            7-> bitmap8
-                            8-> bitmap9
-                            9-> bitmap10
-                            10-> bitmap11
-                            11-> bitmap12
-                            12-> bitmap13
-                            else-> bitmap12
+                        var bitmap: Bitmap = when ((Math.random() * ((14 + 1) - 0) + 0).toInt()) {
+                            0 -> bitmap1
+                            1 -> bitmap2
+                            2 -> bitmap3
+                            3 -> bitmap4
+                            4 -> bitmap5
+                            5 -> bitmap6
+                            6 -> bitmap7
+                            7 -> bitmap8
+                            8 -> bitmap9
+                            9 -> bitmap10
+                            10 -> bitmap11
+                            11 -> bitmap12
+                            12 -> bitmap13
+                            else -> bitmap12
                         }
                         hexagonesList.add(
                             Hexagon(
@@ -195,7 +209,7 @@ class GameActivity : AppCompatActivity() {
                     var res = getIndexHexOnTap(PointF(event.x, event.y), side__)
                     if (res != -1)
 //                        if (!hexagonesList[res].isChosen())
-                            hexagonesList[res].choose()
+                        hexagonesList[res].choose()
 //                        else
 //                            hexagonesList[res].cancel()
                     invalidate()

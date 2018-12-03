@@ -16,34 +16,32 @@
               android:layout_marginBottom="20dp"
               app:layout_constraintRight_toRightOf="parent"
               app:layout_constraintLeft_toLeftOf="parent"
-              app:layout_constraintBottom_toTopOf="@id/menuButtonsLayout"
+              app:layout_constraintBottom_toTopOf="@id/buttonsLayout"
     />
-
 
 
     <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content"
                   android:orientation="vertical"
-                  android:id="@+id/menuButtonsLayout"
+                  android:id="@+id/buttonsLayout"
                   app:layout_constraintVertical_bias="0.8"
                   app:layout_constraintTop_toTopOf="parent"
                   app:layout_constraintBottom_toBottomOf="parent"
                   app:layout_constraintRight_toRightOf="parent"
                   app:layout_constraintLeft_toLeftOf="parent">
 
-
         <Button
                 style="@style/MenuButtonStyle"
-                android:text="@string/button_play"
+                android:text="@string/play"
                 android:id="@+id/playButton"/>
 
         <Button
                 style="@style/MenuButtonStyle"
-                android:text="@string/button_rules"
+                android:text="@string/rules"
                 android:id="@+id/rulesButton"/>
 
         <Button
                 style="@style/MenuButtonStyle"
-                android:text="@string/button_exit"
+                android:text="@string/exit"
                 android:id="@+id/exitButton"/>
     </LinearLayout>
 

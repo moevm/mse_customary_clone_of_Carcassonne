@@ -4,16 +4,19 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
-import android.view.View
+import android.view.Gravity
 import android.widget.ImageButton
 import android.widget.LinearLayout
+import android.widget.TextView
 import kotlinx.android.synthetic.main.activity_players.*
 import java.util.*
 
+
 class PlayersActivity : AppCompatActivity() {
 
-    var players: ArrayList<String> = ArrayList()
+    private var players: ArrayList<PlayerInfo> = ArrayList()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,33 +25,22 @@ class PlayersActivity : AppCompatActivity() {
         addNewPlayer()
         addNewPlayer()
         setButtonListeners()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        setFullscreenMode()
+        hideSystemUI(window)
     }
 
 
-    /*Set fullscreen mode*/
-    private fun setFullscreenMode() {
-        window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-                // Set the content to appear under the system bars so that the
-                // content doesn't resize when the system bars hide and show.
-                or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                // Hide the nav bar and status bar
-                or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                or View.SYSTEM_UI_FLAG_FULLSCREEN)
+    override fun onWindowFocusChanged(hasFocus: Boolean) {
+        super.onWindowFocusChanged(hasFocus)
+        hideSystemUI(window)
     }
 
 
     /*Устанавливает слушатели на кнопки меню*/
     private fun setButtonListeners() {
         playButton.setOnClickListener {
-            val play = Intent(this, GameActivity::class.java)
-            startActivity(play)
+            val openGameActivity = Intent(this, GameActivity::class.java)
+            openGameActivity.putParcelableArrayListExtra("players", players)
+            startActivity(openGameActivity)
         }
 
         backButton.setOnClickListener {
@@ -58,44 +50,81 @@ class PlayersActivity : AppCompatActivity() {
 
     /*Добавление нового игрока*/
     private fun addNewPlayer() {
-        playerArea.removeView(findViewById(R.id.addPlayerButton))
-        addPlayerButton()
+        playerIcons.removeView(findViewById(R.id.addPlayerButton))
+        players.add(PlayerInfo(getNewPlayerName(), getNewPlayerColor()))
+        addPlayerViews(players.last())
         addAddButton()
     }
 
-    /*Добавляет кружок игрока в список*/
-    fun addPlayerButton() {
-        val newPlayer = ImageButton(this)
-        val params =
-            LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
-        params.setMargins(10, 10, 10, 10)
-        newPlayer.layoutParams = params
-        newPlayer.setImageResource(R.drawable.ic_player)
-        newPlayer.setBackgroundResource(R.drawable.circle)
-        val rnd = Random() // TODO: брать не рандомные цвета
-        (newPlayer.background as? GradientDrawable)?.setColor(
-            Color.argb(
-                255,
-                rnd.nextInt(256),
-                rnd.nextInt(256),
-                rnd.nextInt(256)
-            )
+    //Цвет нового игрока
+    private fun getNewPlayerColor(): Int {
+        val colors = resources.getStringArray(R.array.PlayerColors)
+        for(i in 0 until colors.size) {
+            players.find {
+                it.color == Color.parseColor(colors[i])
+            } ?: return Color.parseColor(colors[i])
+        }
+        return Color.GRAY
+    }
+
+    //Имя нового игрока
+    private fun getNewPlayerName(): String {
+        for(i in 1..6) {
+            val possibleName = "Player $i"
+            players.find {
+                it.name == possibleName
+            } ?: return possibleName
+        }
+        return "Player 0"
+    }
+
+
+
+    /*Добавляет иконку и имя игрока в список*/
+    private fun addPlayerViews(player: PlayerInfo) {
+        val newPlayerIcon = ImageButton(this)
+        val params = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.WRAP_CONTENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT
         )
-        newPlayer.setOnClickListener {
+        params.setMargins(10, 10, 10, 10)
+        newPlayerIcon.layoutParams = params
+        newPlayerIcon.setImageResource(R.drawable.ic_player)
+        newPlayerIcon.setBackgroundResource(R.drawable.circle)
+        (newPlayerIcon.background as? GradientDrawable)?.setColor(player.color)
+
+        val newPlayerName = TextView(this,null, 0, R.style.PlayerName)
+        params.width = dpToPx(100) //TODO: задавать это значение в ресурсах
+        newPlayerName.layoutParams = params
+        newPlayerName.gravity = Gravity.CENTER_HORIZONTAL
+        newPlayerName.text = player.name
+        newPlayerName.setOnClickListener {
+            val changeNameDialog = ChangeNameDialog()
+            changeNameDialog.nameField = newPlayerName
+            changeNameDialog.player = player
+            changeNameDialog.show(supportFragmentManager, "ChangeNameDialog")
+        }
+        newPlayerIcon.setOnClickListener {
             if (players.size > 2) {
-                players.removeAt(players.lastIndex)
-                playerArea.removeView(newPlayer)
+                players.remove(player)
+                playerIcons.removeView(newPlayerIcon)
+                playerNames.removeView(newPlayerName)
                 if (players.size == 5) {
                     addAddButton()
                 }
             }
         }
-        playerArea.addView(newPlayer)
-        players.add("Player${players.size + 1}") // TODO: нормально собирать инфу и отправлять ее
+        playerIcons.addView(newPlayerIcon)
+        playerNames.addView(newPlayerName)
+    }
+
+    private fun dpToPx(dp: Int): Int {
+        return (dp * resources.displayMetrics.density + 0.5f).toInt()
     }
 
 
-    /*Добавляет кнопку добавления нового игрока*/
+
+    /*Устанавливает кнопку добавления нового игрока*/
     private fun addAddButton() {
         if (players.size < 6) {
             val newAddButton = ImageButton(this)
@@ -108,13 +137,20 @@ class PlayersActivity : AppCompatActivity() {
             newAddButton.setImageResource(R.drawable.ic_add)
             newAddButton.setBackgroundResource(R.drawable.circle)
             newAddButton.id = R.id.addPlayerButton
-            (newAddButton.background as? GradientDrawable)?.setColor(resources.getColor(R.color.colorMenuButton))
+            (newAddButton.background as? GradientDrawable)?.setColor(
+                ContextCompat.getColor(
+                    this,
+                    R.color.colorMenuButton
+                )
+            )
             newAddButton.setOnClickListener {
                 addNewPlayer()
             }
-            playerArea.addView(newAddButton)
+            playerIcons.addView(newAddButton)
         }
     }
+
+
 }
 
 

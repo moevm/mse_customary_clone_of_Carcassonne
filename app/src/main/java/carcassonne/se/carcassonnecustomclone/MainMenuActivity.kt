@@ -3,7 +3,6 @@ package carcassonne.se.carcassonnecustomclone
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.view.View
 import kotlinx.android.synthetic.main.activity_main_menu.*
 
 class MainMenuActivity : AppCompatActivity() {
@@ -12,26 +11,18 @@ class MainMenuActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main_menu)
         setButtonListeners()
-
-
+        hideSystemUI(window)
     }
 
-    override fun onResume() {
-        super.onResume()
-        setFullscreenMode()
+    override fun onBackPressed() {
+        //super.onBackPressed()
+        //TODO: я вот совсем не уверен что так делать хорошо
+        showExitDialog()
     }
 
-    /*Set fullscreen mode*/
-    private fun setFullscreenMode() {
-        window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-                // Set the content to appear under the system bars so that the
-                // content doesn't resize when the system bars hide and show.
-                or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                // Hide the nav bar and status bar
-                or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                or View.SYSTEM_UI_FLAG_FULLSCREEN)
+    override fun onWindowFocusChanged(hasFocus: Boolean) {
+        super.onWindowFocusChanged(hasFocus)
+        hideSystemUI(window)
     }
 
 
@@ -47,9 +38,8 @@ class MainMenuActivity : AppCompatActivity() {
             startActivity(openRulesActivity)
         }
 
-        //TODO добавить всплывающее окно с подтверждением выхода
         exitButton.setOnClickListener {
-            finish()
+            showExitDialog()
         }
 
         settingsButton.setOnClickListener {
@@ -61,8 +51,11 @@ class MainMenuActivity : AppCompatActivity() {
             val openInfoActivity = Intent(this, InfoActivity::class.java)
             startActivity(openInfoActivity)
         }
+    }
 
-
+    private fun showExitDialog() {
+        val exitDialog = ExitDialog()
+        exitDialog.show(supportFragmentManager, "ExitDialog")
     }
 }
 

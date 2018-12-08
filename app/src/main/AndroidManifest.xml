@@ -38,6 +38,9 @@
                 android:name=".SettingsActivity"
                 android:screenOrientation="sensorLandscape">
         </activity>
+        <activity android:name=".LoadingActivity"
+                  android:screenOrientation="sensorLandscape">
+        </activity>
     </application>
 
 </manifest>

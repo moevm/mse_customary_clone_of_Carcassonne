@@ -18,6 +18,7 @@ import kotlin.math.sqrt
 class GameActivity : AppCompatActivity() {
 
     private var players: ArrayList<PlayerInfo>? = null
+    private var currentPlayerIndex: Int = -1
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)
@@ -34,9 +35,10 @@ class GameActivity : AppCompatActivity() {
         setButtonListeners()
         players = intent.getParcelableArrayListExtra("players")
         displayPlayers()
-        okButton.visibility = View.INVISIBLE
-        declineButton.visibility = View.INVISIBLE
-        //TODO: нужно запилить методы для отображения этих кнопочек
+        currentTile.setTile(R.drawable.castle1)
+        nextPlayer()
+        hideOkButton()
+        hideDeclineButton()
     }
 
     /*Добавляет игроков на панель игроков слева*/
@@ -251,16 +253,52 @@ class GameActivity : AppCompatActivity() {
         }
     }
 
+    private fun nextPlayer() {
+        currentPlayerInfo()?.setCurrent(false)
+        if(currentPlayerIndex != players?.size?.minus(1)) {
+            currentPlayerIndex++
+        } else {
+            currentPlayerIndex = 0
+        }
+        currentPlayerInfo()?.setCurrent(true)
+    }
+
+    private fun currentPlayerInfo(): PlayerGameInfo? {
+        return if(currentPlayerIndex in 0..(players?.size ?: 0)) {
+            (playerInfoArea.getChildAt(currentPlayerIndex) as PlayerGameInfo)
+        } else {
+            null
+        }
+    }
+
+
+    private fun showOkButton() {
+        okButton.visibility = View.VISIBLE
+    }
+
+    private fun showDeclineButton() {
+        declineButton.visibility = View.VISIBLE
+    }
+
+    private fun hideOkButton() {
+        okButton.visibility = View.INVISIBLE
+    }
+
+    private fun hideDeclineButton() {
+        declineButton.visibility = View.INVISIBLE
+    }
+
+
+
+
     private fun setButtonListeners() {
         pauseButton.setOnClickListener {
             showPauseDialog()
         }
         okButton.setOnClickListener {
-
         }
 
         declineButton.setOnClickListener {
-
         }
 
         remainingTiles.setOnClickListener {

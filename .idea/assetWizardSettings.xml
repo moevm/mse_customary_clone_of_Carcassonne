@@ -33,7 +33,9 @@
                                   </option>
                                   <option name="values">
                                     <map>
-                                      <entry key="outputName" value="ic_close" />
+                                      <entry key="assetType" value="IMAGE" />
+                                      <entry key="imageAsset" value="A:\mse_customary_clone_of_Carcassonne\app\src\main\res\drawable\ic_king.png" />
+                                      <entry key="outputName" value="ic_player" />
                                       <entry key="theme" value="CUSTOM" />
                                       <entry key="themeColor" value="000000" />
                                     </map>

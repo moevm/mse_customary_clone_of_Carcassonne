@@ -82,7 +82,7 @@ class PlayersActivity : AppCompatActivity() {
 
     /*Добавляет иконку и имя игрока в список*/
     private fun addPlayerViews(player: PlayerInfo) {
-        val newPlayerIcon = ImageButton(this)
+        val newPlayerIcon = ImageButton(this, null, 0, R.style.PlayerSelectIcon)
         val params = LinearLayout.LayoutParams(
             LinearLayout.LayoutParams.WRAP_CONTENT,
             LinearLayout.LayoutParams.WRAP_CONTENT
@@ -90,7 +90,7 @@ class PlayersActivity : AppCompatActivity() {
         params.setMargins(10, 10, 10, 10)
         newPlayerIcon.layoutParams = params
         newPlayerIcon.setImageResource(R.drawable.ic_player)
-        newPlayerIcon.setBackgroundResource(R.drawable.circle)
+        //newPlayerIcon.setBackgroundResource(R.drawable.circle)
         (newPlayerIcon.background as? GradientDrawable)?.setColor(player.color)
 
         val newPlayerName = TextView(this,null, 0, R.style.PlayerName)
@@ -102,6 +102,7 @@ class PlayersActivity : AppCompatActivity() {
             val changeNameDialog = ChangeNameDialog()
             changeNameDialog.nameField = newPlayerName
             changeNameDialog.player = player
+            changeNameDialog.players = players
             changeNameDialog.show(supportFragmentManager, "ChangeNameDialog")
         }
         newPlayerIcon.setOnClickListener {

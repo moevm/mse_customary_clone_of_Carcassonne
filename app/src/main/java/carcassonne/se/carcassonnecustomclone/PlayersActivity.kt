@@ -25,6 +25,11 @@ class PlayersActivity : AppCompatActivity() {
         addNewPlayer()
         addNewPlayer()
         setButtonListeners()
+    }
+
+
+    override fun onResume() {
+        super.onResume()
         hideSystemUI(window)
     }
 

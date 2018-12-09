@@ -11,6 +11,10 @@ class MainMenuActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main_menu)
         setButtonListeners()
+    }
+
+    override fun onResume() {
+        super.onResume()
         hideSystemUI(window)
     }
 

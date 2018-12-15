@@ -11,7 +11,6 @@ import android.graphics.Bitmap
 import android.R.attr.angle
 
 
-
 class Hexagon(X: Float, Y: Float, side: Float, roundColor: Int, patternBitmap: Bitmap, choosed: Boolean) {
     var center: PointF
     var sideLen: Float
@@ -43,18 +42,13 @@ class Hexagon(X: Float, Y: Float, side: Float, roundColor: Int, patternBitmap: B
     }
 
     fun choose() {
-        if(tapCounter == 0)
-        {
+        if (tapCounter == 0) {
             cancel()
             tapCounter++
-        }
-        else if(tapCounter < 7)
-        {
+        } else if (tapCounter < 7) {
             rotate()
             tapCounter++
-        }
-        else
-        {
+        } else {
             tapCounter = 0
             isChoosed = true
             mPaint.color = Color.TRANSPARENT
@@ -125,17 +119,23 @@ class Hexagon(X: Float, Y: Float, side: Float, roundColor: Int, patternBitmap: B
 
     }
 
-    fun rotate()
-    {
-        val angle:Float = (60*tapCounter).toFloat()
+    fun rotate() {
+        val angle: Float = (60 * tapCounter).toFloat()
         val matrix = Matrix()
         matrix.postRotate(angle)
         //matrix.postScale(0.7f, 0.7f)
-        val rotatedBitmap = Bitmap.createBitmap(this.realBitmap, 0, 0,
-            this.realBitmap.width, this.realBitmap.height, matrix, true)
+        val rotatedBitmap = Bitmap.createBitmap(
+            this.realBitmap, 0, 0,
+            this.realBitmap.width, this.realBitmap.height, matrix, true
+        )
         //val x_Offset = (sideLen/2) * cos(30f)
         //val y_Offset = (sideLen/2) * cos(60f) //TODO сделать нормально, а не ущербно
         bitmap = rotatedBitmap
+    }
+
+    fun setSideLength(length: Float) {
+        sideLen = length
+        getHexagonPath()
     }
 
 }

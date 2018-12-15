@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.support.constraint.ConstraintLayout
 import android.support.v7.app.AppCompatActivity
 import android.util.DisplayMetrics
+import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.widget.LinearLayout
@@ -218,15 +219,22 @@ class GameActivity : AppCompatActivity() {
                         hexagonesList[res].choose()
 //                        else
 //                            hexagonesList[res].cancel()
+                    //Log.d("ZOOM", "DOWN $side__")
+                    //side__= (side__*1.1).toFloat()
+                    //updateHexagones()
                     invalidate()
                     //hexagonesList.add(Hexagon(event.x, event.y, side__, Color.MAGENTA))
                     //println(hexagonesList.last())
                     //invalidate()
+
                 }
             }
 
             return true
+
         }
+
+
 
         var drawBackground = true
         override fun onDraw(canvas: Canvas) {
@@ -253,6 +261,14 @@ class GameActivity : AppCompatActivity() {
                 elem.draw(canvas)
                 //canvas.drawCircle(elem.center.x, elem.center.y, side__, roundPincell)
                 println(elem.sideLen)
+            }
+
+
+        }
+
+        fun updateHexagones() {
+            hexagonesList.forEach {
+                it.setSideLength(side__)
             }
         }
     }

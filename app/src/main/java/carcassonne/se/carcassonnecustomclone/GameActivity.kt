@@ -63,8 +63,7 @@ class GameActivity : AppCompatActivity() {
         val dm = DisplayMetrics()
         windowManager.defaultDisplay.getMetrics(dm)
         val displayHeight = dm.heightPixels
-        val margin = pxToDp((displayHeight - dpToPx(50) * 6) / 7)
-        //TODO: ресурсы опять же
+        val margin = pxToDp((displayHeight - resources.getDimension(R.dimen.menu_button_height).toInt() * 6) / 7)
         val params = LinearLayout.LayoutParams(
             LinearLayout.LayoutParams.WRAP_CONTENT,
             LinearLayout.LayoutParams.WRAP_CONTENT
@@ -79,9 +78,6 @@ class GameActivity : AppCompatActivity() {
         return (px / resources.displayMetrics.density + 0.5f).toInt()
     }
 
-    private fun dpToPx(dp: Int): Int {
-        return (dp * resources.displayMetrics.density).toInt()
-    }
 
 
     private fun showPauseDialog() {

@@ -98,7 +98,7 @@ class PlayersActivity : AppCompatActivity() {
         (newPlayerIcon.background as? GradientDrawable)?.setColor(player.color)
 
         val newPlayerName = TextView(this,null, 0, R.style.PlayerName)
-        params.width = dpToPx(100) //TODO: задавать это значение в ресурсах
+        params.width = resources.getDimension(R.dimen.player_menu_button_size).toInt()
         newPlayerName.layoutParams = params
         newPlayerName.gravity = Gravity.CENTER_HORIZONTAL
         newPlayerName.text = player.name
@@ -137,7 +137,7 @@ class PlayersActivity : AppCompatActivity() {
                 LinearLayout.LayoutParams.WRAP_CONTENT
             )
             params.setMargins(10, 10, 10, 10)
-            params.width = dpToPx(100)
+            params.width = resources.getDimension(R.dimen.player_menu_button_size).toInt()
             newAddButton.layoutParams = params
             newAddButton.setImageResource(R.drawable.ic_add)
             newAddButton.id = R.id.addPlayerButton

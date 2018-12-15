@@ -47,7 +47,7 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintLeft_toRightOf="@id/cancelButton"
             app:layout_constraintHorizontal_bias="1"
-            android:layout_marginStart="30dp"
+            android:layout_marginStart="@dimen/dialog_button_margin"
     />
 
 </android.support.constraint.ConstraintLayout>

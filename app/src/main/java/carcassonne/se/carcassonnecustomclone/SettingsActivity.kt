@@ -11,6 +11,10 @@ class SettingsActivity : AppCompatActivity() {
         setContentView(R.layout.activity_settings)
         setButtonListeners()
         configureBars()
+    }
+
+    override fun onResume() {
+        super.onResume()
         hideSystemUI(window)
     }
 

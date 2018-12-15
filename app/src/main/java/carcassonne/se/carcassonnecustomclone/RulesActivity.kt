@@ -10,9 +10,13 @@ class RulesActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_rules)
         setButtonListeners()
-        hideSystemUI(window)
     }
 
+
+    override fun onResume() {
+        super.onResume()
+        hideSystemUI(window)
+    }
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)

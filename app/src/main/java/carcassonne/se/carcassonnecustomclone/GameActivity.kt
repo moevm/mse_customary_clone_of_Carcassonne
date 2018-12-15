@@ -25,9 +25,13 @@ class GameActivity : AppCompatActivity() {
         hideSystemUI(window)
     }
 
+    override fun onResume() {
+        super.onResume()
+        hideSystemUI(window)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        hideSystemUI(window)
         setContentView(R.layout.activity_game)
         val layout1 = findViewById(R.id.layout1) as ConstraintLayout
         val canvass = Canvass(this)

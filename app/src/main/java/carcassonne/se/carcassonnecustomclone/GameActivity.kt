@@ -68,7 +68,7 @@ class GameActivity : AppCompatActivity() {
             LinearLayout.LayoutParams.WRAP_CONTENT,
             LinearLayout.LayoutParams.WRAP_CONTENT
         )
-        params.setMargins(0, 2 * margin, 0, 0)
+        params.setMargins(0, (margin * 1.5).toInt(), 0, 0)
         player.layoutParams = params
         playerInfoArea.addView(player)
     }

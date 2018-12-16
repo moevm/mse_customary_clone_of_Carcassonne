@@ -92,7 +92,8 @@ class PlayersActivity : AppCompatActivity() {
             LinearLayout.LayoutParams.WRAP_CONTENT,
             LinearLayout.LayoutParams.WRAP_CONTENT
         )
-        params.setMargins(10, 10, 10, 10)
+        val margin = resources.getDimension(R.dimen.default_margin).toInt()
+        params.setMargins(margin, margin, margin, margin)
         newPlayerIcon.layoutParams = params
         newPlayerIcon.setImageResource(R.drawable.ic_player)
         (newPlayerIcon.background as? GradientDrawable)?.setColor(player.color)
@@ -136,7 +137,8 @@ class PlayersActivity : AppCompatActivity() {
                 LinearLayout.LayoutParams.WRAP_CONTENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
             )
-            params.setMargins(10, 10, 10, 10)
+            val margin = resources.getDimension(R.dimen.default_margin).toInt()
+            params.setMargins(margin, margin, margin, margin)
             params.width = resources.getDimension(R.dimen.player_menu_button_size).toInt()
             newAddButton.layoutParams = params
             newAddButton.setImageResource(R.drawable.ic_add)

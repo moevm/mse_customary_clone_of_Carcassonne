@@ -36,6 +36,7 @@ class TilesDialog : DialogFragment() {
                 tile.layoutParams = imageParams
                 tileRow.addView(tile)
                 val count = TextView(activity, null, 0, R.style.PlayerName)
+                count.textSize = resources.getDimension(R.dimen.small_text_size) / resources.displayMetrics.density
                 count.text = "2/3"
                 count.gravity = Gravity.CENTER_HORIZONTAL
                 val countParams = TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT)

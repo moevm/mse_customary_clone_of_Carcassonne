@@ -103,6 +103,7 @@ class PlayersActivity : AppCompatActivity() {
         newPlayerName.layoutParams = params
         newPlayerName.gravity = Gravity.CENTER_HORIZONTAL
         newPlayerName.text = player.name
+        newPlayerName.textSize = resources.getDimension(R.dimen.small_text_size) / resources.displayMetrics.density
         newPlayerName.setOnClickListener {
             val changeNameDialog = ChangeNameDialog()
             changeNameDialog.nameField = newPlayerName

@@ -23,6 +23,7 @@
               android:id="@+id/playerName"
               android:fontFamily="@font/aclonica"
               android:textColor="#000"
+              android:textSize="@dimen/small_text_size"
               app:layout_constraintRight_toRightOf="parent"
               app:layout_constraintLeft_toRightOf="@id/playerIcon"
               app:layout_constraintTop_toTopOf="parent"
@@ -44,6 +45,7 @@
               android:id="@+id/coinCounter"
               android:fontFamily="@font/aclonica"
               android:textColor="#000"
+              android:textSize="@dimen/small_text_size"
               app:layout_constraintRight_toLeftOf="@id/coinIcon"
               app:layout_constraintBottom_toBottomOf="@id/coinIcon"
     />
@@ -62,6 +64,7 @@
               android:id="@+id/figurineCounter"
               android:fontFamily="@font/aclonica"
               android:textColor="#000"
+              android:textSize="@dimen/small_text_size"
               app:layout_constraintBottom_toBottomOf="@id/coinIcon"
               app:layout_constraintRight_toLeftOf="@id/figurineIcon"
     />

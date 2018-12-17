@@ -10,8 +10,11 @@ import android.util.DisplayMetrics
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
+import android.view.ViewGroup
 import android.widget.LinearLayout
+import carcassonne.se.carcassonnecustomclone.zoom.ZoomLayout
 import kotlinx.android.synthetic.main.activity_game.*
+import kotlinx.android.synthetic.main.activity_game.view.*
 import kotlin.math.abs
 import kotlin.math.sqrt
 
@@ -34,9 +37,9 @@ class GameActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game)
-        val layout1 = findViewById(R.id.layout1) as ConstraintLayout
         val canvass = Canvass(this)
-        layout1.addView(canvass)
+        canvass.layoutParams = ViewGroup.LayoutParams(4000, 4000)
+        zoomLayout.addView(canvass)
         setButtonListeners()
         players = intent.getParcelableArrayListExtra("players")
         displayPlayers()
@@ -90,12 +93,15 @@ class GameActivity : AppCompatActivity() {
         pauseDialog.show(supportFragmentManager, "PauseDialog")
     }
 
-    class Canvass : View {
-        var side__ = 140f
+    class Canvass(context: Context) : View(context) {
+        var side__ = 180f
+        private var zoomContainer: ZoomLayout? = null
         var hexagonesList = ArrayList<Hexagon>(0)
         var shouldInit = true
+
         override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
             super.onLayout(changed, l, t, r, b)
+            zoomContainer = parent as ZoomLayout
             if (shouldInit) {
                 //Here you can get the size!
                 val ancho = width
@@ -166,7 +172,6 @@ class GameActivity : AppCompatActivity() {
             println("hello")
         }
 
-        constructor(context: Context) : super(context)
 
         fun getHexToPointDist(hexCenter: PointF, destPoint: PointF): Float {
             var deltaX = hexCenter.x - destPoint.x
@@ -177,7 +182,7 @@ class GameActivity : AppCompatActivity() {
         fun getIndexHexOnTap(destPoint: PointF, radius: Float): Int {
             var bestIndex: Int = -1
             var bestDistance: Float = -1f
-            for (i in 0..hexagonesList.size - 1) {
+            for (i in 0 until hexagonesList.size) {
                 if (((hexagonesList[i].center.x - destPoint.x) >= abs(radius)) || ((hexagonesList[i].center.y - destPoint.y) >= abs(
                         radius
                     ))
@@ -213,51 +218,51 @@ class GameActivity : AppCompatActivity() {
             MotionEvent.ACTION_DOWN
             when (event.actionMasked) {
                 MotionEvent.ACTION_DOWN -> {
-                    var res = getIndexHexOnTap(PointF(event.x, event.y), side__)
+                    val shiftX = (zoomContainer?.panX ?: 0f)
+                    val shiftY = (zoomContainer?.panY ?: 0f)
+                    val zoom = (zoomContainer?.realZoom ?: 1f)
+                    var res = getIndexHexOnTap(PointF(event.x / zoom - shiftX, event.y / zoom - shiftY), side__ )
                     if (res != -1)
 //                        if (!hexagonesList[res].isChosen())
                         hexagonesList[res].choose()
 //                        else
 //                            hexagonesList[res].cancel()
-                    //Log.d("ZOOM", "DOWN $side__")
-                    //side__= (side__*1.1).toFloat()
                     //updateHexagones()
                     invalidate()
                     //hexagonesList.add(Hexagon(event.x, event.y, side__, Color.MAGENTA))
                     //println(hexagonesList.last())
-                    //invalidate()
+                    //Log.d("ZOOM", "${zoomLayout.zoom}")
+                    Log.d("ZOOM", "${zoomContainer?.zoom} ${zoomContainer?.realZoom}")
+                    Log.d("ZOOM", "${zoomContainer?.panX} ${zoomContainer?.panY}")
 
                 }
             }
-
             return true
-
         }
 
 
 
         var drawBackground = true
         override fun onDraw(canvas: Canvas) {
-
             canvas.drawRGB(0, 0, 0)
-            val pincell = Paint()
-            pincell.setStrokeWidth(4f)
-            pincell.setARGB(
-                255,
-                (Math.random() * 255).toInt(),
-                (Math.random() * 255).toInt(),
-                (Math.random() * 255).toInt()
-            )
-            val roundPincell = Paint()
-            roundPincell.setARGB(255, 255, 0, 0)
-            roundPincell.setStyle(Paint.Style.STROKE);
+//            val pincell = Paint()
+//            pincell.strokeWidth = 4f
+//            pincell.setARGB(
+//                255,
+//                (Math.random() * 255).toInt(),
+//                (Math.random() * 255).toInt(),
+//                (Math.random() * 255).toInt()
+//            )
+//            val roundPincell = Paint()
+//            roundPincell.setARGB(255, 255, 0, 0)
+//            roundPincell.style = Paint.Style.STROKE
             //center.set(center.x + hexHorizAlign, center.y + hexVertAlign)
             //var bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.mygod)
             //canvas.drawBitmap(bitmap, 100f, 100f, pincell)
             //drawHex(center, size, pincell, canvas)
 
             for (elem in hexagonesList) {
-                pincell.color = elem.getColor()
+                //pincell.color = elem.getColor()
                 elem.draw(canvas)
                 //canvas.drawCircle(elem.center.x, elem.center.y, side__, roundPincell)
                 println(elem.sideLen)
@@ -266,11 +271,6 @@ class GameActivity : AppCompatActivity() {
 
         }
 
-        fun updateHexagones() {
-            hexagonesList.forEach {
-                it.setSideLength(side__)
-            }
-        }
     }
 
     private fun nextPlayer() {

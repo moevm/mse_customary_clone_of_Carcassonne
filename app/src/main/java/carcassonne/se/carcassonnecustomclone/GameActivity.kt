@@ -5,6 +5,7 @@ import android.content.Context
 import android.graphics.*
 import android.os.Bundle
 import android.support.constraint.ConstraintLayout
+import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.util.DisplayMetrics
 import android.util.Log
@@ -205,37 +206,29 @@ class GameActivity : AppCompatActivity() {
             return bestIndex
         }
 
+        val MAX_CLICK_DISTANCE = 20
+        var pressedX = 0f
+        var pressedY = 0f
+        private val MAX_CLICK_DURATION = 300
+        private var timeDown = 0L
+
         override fun onTouchEvent(event: MotionEvent): Boolean {
-            // MotionEvent reports input details from the touch screen
-            // and other input controls. In this case, you are only
-            // interested in events where the touch position  changed.
-
-            val x: Float = event.x
-            val y: Float = event.y
-
-            println(x)
-            println(y)
-            MotionEvent.ACTION_DOWN
             when (event.actionMasked) {
                 MotionEvent.ACTION_DOWN -> {
-                    val shiftX = (zoomContainer?.panX ?: 0f)
-                    val shiftY = (zoomContainer?.panY ?: 0f)
-                    val zoom = (zoomContainer?.realZoom ?: 1f)
-                    var res = getIndexHexOnTap(PointF(event.x / zoom - shiftX, event.y / zoom - shiftY), side__ )
-                    if (res != -1)
-//                        if (!hexagonesList[res].isChosen())
-                        hexagonesList[res].choose()
-//                        else
-//                            hexagonesList[res].cancel()
-                    //updateHexagones()
-                    invalidate()
-                    //hexagonesList.add(Hexagon(event.x, event.y, side__, Color.MAGENTA))
-                    //println(hexagonesList.last())
-                    //Log.d("ZOOM", "${zoomLayout.zoom}")
-                    Log.d("ZOOM", "${zoomContainer?.zoom} ${zoomContainer?.realZoom}")
-                    Log.d("ZOOM", "${zoomContainer?.panX} ${zoomContainer?.panY}")
-
+                    timeDown = System.currentTimeMillis()
                 }
+                MotionEvent.ACTION_UP -> {
+                    if(System.currentTimeMillis() - timeDown < MAX_CLICK_DURATION) {
+                        val shiftX = (zoomContainer?.panX ?: 0f)
+                        val shiftY = (zoomContainer?.panY ?: 0f)
+                        val zoom = (zoomContainer?.realZoom ?: 1f)
+                        var res = getIndexHexOnTap(PointF(event.x / zoom - shiftX, event.y / zoom - shiftY), side__ )
+                        if (res != -1)
+                            hexagonesList[res].choose()
+                        invalidate()
+                    }
+                }
+
             }
             return true
         }
@@ -244,7 +237,7 @@ class GameActivity : AppCompatActivity() {
 
         var drawBackground = true
         override fun onDraw(canvas: Canvas) {
-            canvas.drawRGB(0, 0, 0)
+            canvas.drawColor(ContextCompat.getColor(context, R.color.colorPrimaryDark))
 //            val pincell = Paint()
 //            pincell.strokeWidth = 4f
 //            pincell.setARGB(

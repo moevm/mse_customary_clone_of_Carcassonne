@@ -5,7 +5,7 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".GameActivity" android:id="@+id/layout1">
+        tools:context=".GameActivity">
 
 
     <ImageButton android:layout_width="@dimen/game_button_size"
@@ -34,6 +34,26 @@
     >
 
     </carcassonne.se.carcassonnecustomclone.CurrentTile>
+
+
+    <carcassonne.se.carcassonnecustomclone.zoom.ZoomLayout android:layout_width="match_parent"
+                                                           android:layout_height="match_parent"
+                                                           android:id="@+id/zoomLayout"
+                                                           app:overScrollHorizontal="false"
+                                                           app:overScrollVertical="false"
+                                                           app:overPinchable="false"
+                                                           app:horizontalPanEnabled="true"
+                                                           app:verticalPanEnabled="true"
+                                                           app:zoomEnabled="true"
+                                                           app:minZoom="3"
+                                                           app:minZoomType="zoom"
+                                                           app:maxZoom="7.0"
+                                                           app:maxZoomType="zoom"
+                                                           app:hasClickableChildren="false"
+    />
+
+
+
 
     <Button android:layout_width="@dimen/game_button_size"
             android:layout_height="@dimen/game_button_size"

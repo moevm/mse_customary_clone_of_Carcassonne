@@ -92,17 +92,18 @@ class PlayersActivity : AppCompatActivity() {
             LinearLayout.LayoutParams.WRAP_CONTENT,
             LinearLayout.LayoutParams.WRAP_CONTENT
         )
-        params.setMargins(10, 10, 10, 10)
+        val margin = resources.getDimension(R.dimen.default_margin).toInt()
+        params.setMargins(margin, margin, margin, margin)
         newPlayerIcon.layoutParams = params
         newPlayerIcon.setImageResource(R.drawable.ic_player)
-        //newPlayerIcon.setBackgroundResource(R.drawable.circle)
         (newPlayerIcon.background as? GradientDrawable)?.setColor(player.color)
 
         val newPlayerName = TextView(this,null, 0, R.style.PlayerName)
-        params.width = dpToPx(100) //TODO: задавать это значение в ресурсах
+        params.width = resources.getDimension(R.dimen.player_menu_button_size).toInt()
         newPlayerName.layoutParams = params
         newPlayerName.gravity = Gravity.CENTER_HORIZONTAL
         newPlayerName.text = player.name
+        newPlayerName.textSize = resources.getDimension(R.dimen.small_text_size) / resources.displayMetrics.density
         newPlayerName.setOnClickListener {
             val changeNameDialog = ChangeNameDialog()
             changeNameDialog.nameField = newPlayerName
@@ -132,15 +133,16 @@ class PlayersActivity : AppCompatActivity() {
     /*Устанавливает кнопку добавления нового игрока*/
     private fun addAddButton() {
         if (players.size < 6) {
-            val newAddButton = ImageButton(this)
+            val newAddButton = ImageButton(this, null, 0, R.style.PlayerSelectIcon)
             val params = LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
             )
-            params.setMargins(10, 10, 10, 10)
+            val margin = resources.getDimension(R.dimen.default_margin).toInt()
+            params.setMargins(margin, margin, margin, margin)
+            params.width = resources.getDimension(R.dimen.player_menu_button_size).toInt()
             newAddButton.layoutParams = params
             newAddButton.setImageResource(R.drawable.ic_add)
-            newAddButton.setBackgroundResource(R.drawable.circle)
             newAddButton.id = R.id.addPlayerButton
             (newAddButton.background as? GradientDrawable)?.setColor(
                 ContextCompat.getColor(

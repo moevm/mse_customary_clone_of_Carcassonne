@@ -3,7 +3,7 @@
                                              android:layout_width="wrap_content"
                                              android:layout_height="wrap_content"
                                              xmlns:app="http://schemas.android.com/apk/res-auto"
-                                             android:padding="15dp"
+                                             android:padding="@dimen/default_padding"
                                              android:background="@drawable/modal_dialog"
 >
 
@@ -11,7 +11,7 @@
               android:layout_height="wrap_content"
               style="@style/TitleText"
               android:maxLines="1"
-              android:textSize="30sp"
+              android:textSize="@dimen/title_text_size"
               android:id="@+id/titleText"
               android:text="@string/title_pause"
               app:layout_constraintTop_toTopOf="parent"
@@ -24,8 +24,8 @@
                   android:layout_height="wrap_content"
                   android:orientation="vertical"
                   android:id="@+id/buttonsLayout"
-                  android:layout_marginLeft="100dp"
-                  android:layout_marginRight="100dp"
+                  android:layout_marginLeft="@dimen/pause_dialog_side_margin"
+                  android:layout_marginRight="@dimen/pause_dialog_side_margin"
                   app:layout_constraintVertical_bias="0.8"
                   app:layout_constraintTop_toBottomOf="@id/titleText"
                   app:layout_constraintBottom_toBottomOf="parent"

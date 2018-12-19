@@ -3,6 +3,7 @@ package carcassonne.se.carcassonnecustomclone
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import kotlinx.android.synthetic.main.activity_main_menu.*
 
 class MainMenuActivity : AppCompatActivity() {
@@ -11,6 +12,11 @@ class MainMenuActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main_menu)
         setButtonListeners()
+        Log.d("SCREEN_PARAMS", "${resources.displayMetrics.widthPixels / resources.displayMetrics.density } ${resources.displayMetrics.heightPixels / resources.displayMetrics.density }")
+    }
+
+    override fun onResume() {
+        super.onResume()
         hideSystemUI(window)
     }
 

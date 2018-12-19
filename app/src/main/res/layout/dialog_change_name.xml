@@ -21,6 +21,7 @@
     <EditText android:layout_width="0dp"
               android:layout_height="match_parent"
               android:id="@+id/newName"
+              android:textSize="@dimen/small_text_size"
               app:layout_constraintLeft_toLeftOf="parent"
               app:layout_constraintRight_toRightOf="parent"
               app:layout_constraintTop_toBottomOf="@id/titleText"
@@ -47,7 +48,7 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintLeft_toRightOf="@id/cancelButton"
             app:layout_constraintHorizontal_bias="1"
-            android:layout_marginStart="30dp"
+            android:layout_marginStart="@dimen/dialog_button_margin"
     />
 
 </android.support.constraint.ConstraintLayout>

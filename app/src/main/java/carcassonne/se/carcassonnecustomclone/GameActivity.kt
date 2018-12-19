@@ -5,12 +5,17 @@ import android.content.Context
 import android.graphics.*
 import android.os.Bundle
 import android.support.constraint.ConstraintLayout
+import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.util.DisplayMetrics
+import android.util.Log
 import android.view.MotionEvent
 import android.view.View
+import android.view.ViewGroup
 import android.widget.LinearLayout
+import carcassonne.se.carcassonnecustomclone.zoom.ZoomLayout
 import kotlinx.android.synthetic.main.activity_game.*
+import kotlinx.android.synthetic.main.activity_game.view.*
 import kotlin.math.abs
 import kotlin.math.sqrt
 
@@ -25,13 +30,17 @@ class GameActivity : AppCompatActivity() {
         hideSystemUI(window)
     }
 
+    override fun onResume() {
+        super.onResume()
+        hideSystemUI(window)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        hideSystemUI(window)
         setContentView(R.layout.activity_game)
-        val layout1 = findViewById(R.id.layout1) as ConstraintLayout
         val canvass = Canvass(this)
-        layout1.addView(canvass)
+        canvass.layoutParams = ViewGroup.LayoutParams(4000, 4000)
+        zoomLayout.addView(canvass)
         setButtonListeners()
         players = intent.getParcelableArrayListExtra("players")
         displayPlayers()
@@ -59,13 +68,12 @@ class GameActivity : AppCompatActivity() {
         val dm = DisplayMetrics()
         windowManager.defaultDisplay.getMetrics(dm)
         val displayHeight = dm.heightPixels
-        val margin = pxToDp((displayHeight - dpToPx(50) * 6) / 7)
-        //TODO: ресурсы опять же
+        val margin = pxToDp((displayHeight - resources.getDimension(R.dimen.menu_button_height).toInt() * 6) / 7)
         val params = LinearLayout.LayoutParams(
             LinearLayout.LayoutParams.WRAP_CONTENT,
             LinearLayout.LayoutParams.WRAP_CONTENT
         )
-        params.setMargins(0, 2 * margin, 0, 0)
+        params.setMargins(0, (margin * 1.5).toInt(), 0, 0)
         player.layoutParams = params
         playerInfoArea.addView(player)
     }
@@ -75,9 +83,6 @@ class GameActivity : AppCompatActivity() {
         return (px / resources.displayMetrics.density + 0.5f).toInt()
     }
 
-    private fun dpToPx(dp: Int): Int {
-        return (dp * resources.displayMetrics.density).toInt()
-    }
 
 
     private fun showPauseDialog() {
@@ -85,12 +90,15 @@ class GameActivity : AppCompatActivity() {
         pauseDialog.show(supportFragmentManager, "PauseDialog")
     }
 
-    class Canvass : View {
-        var side__ = 140f
+    class Canvass(context: Context) : View(context) {
+        var side__ = 180f
+        private var zoomContainer: ZoomLayout? = null
         var hexagonesList = ArrayList<Hexagon>(0)
         var shouldInit = true
+
         override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
             super.onLayout(changed, l, t, r, b)
+            zoomContainer = parent as ZoomLayout
             if (shouldInit) {
                 //Here you can get the size!
                 val ancho = width
@@ -161,7 +169,6 @@ class GameActivity : AppCompatActivity() {
             println("hello")
         }
 
-        constructor(context: Context) : super(context)
 
         fun getHexToPointDist(hexCenter: PointF, destPoint: PointF): Float {
             var deltaX = hexCenter.x - destPoint.x
@@ -172,7 +179,7 @@ class GameActivity : AppCompatActivity() {
         fun getIndexHexOnTap(destPoint: PointF, radius: Float): Int {
             var bestIndex: Int = -1
             var bestDistance: Float = -1f
-            for (i in 0..hexagonesList.size - 1) {
+            for (i in 0 until hexagonesList.size) {
                 if (((hexagonesList[i].center.x - destPoint.x) >= abs(radius)) || ((hexagonesList[i].center.y - destPoint.y) >= abs(
                         radius
                     ))
@@ -195,62 +202,64 @@ class GameActivity : AppCompatActivity() {
             return bestIndex
         }
 
+        val MAX_CLICK_DISTANCE = 20
+        var pressedX = 0f
+        var pressedY = 0f
+        private val MAX_CLICK_DURATION = 300
+        private var timeDown = 0L
+
         override fun onTouchEvent(event: MotionEvent): Boolean {
-            // MotionEvent reports input details from the touch screen
-            // and other input controls. In this case, you are only
-            // interested in events where the touch position  changed.
-
-            val x: Float = event.x
-            val y: Float = event.y
-
-            println(x)
-            println(y)
-            MotionEvent.ACTION_DOWN
             when (event.actionMasked) {
                 MotionEvent.ACTION_DOWN -> {
-                    var res = getIndexHexOnTap(PointF(event.x, event.y), side__)
-                    if (res != -1)
-//                        if (!hexagonesList[res].isChosen())
-                        hexagonesList[res].choose()
-//                        else
-//                            hexagonesList[res].cancel()
-                    invalidate()
-                    //hexagonesList.add(Hexagon(event.x, event.y, side__, Color.MAGENTA))
-                    //println(hexagonesList.last())
-                    //invalidate()
+                    timeDown = System.currentTimeMillis()
                 }
-            }
+                MotionEvent.ACTION_UP -> {
+                    if(System.currentTimeMillis() - timeDown < MAX_CLICK_DURATION) {
+                        val shiftX = (zoomContainer?.panX ?: 0f)
+                        val shiftY = (zoomContainer?.panY ?: 0f)
+                        val zoom = (zoomContainer?.realZoom ?: 1f)
+                        var res = getIndexHexOnTap(PointF(event.x / zoom - shiftX, event.y / zoom - shiftY), side__ )
+                        if (res != -1)
+                            hexagonesList[res].choose()
+                        invalidate()
+                    }
+                }
 
+            }
             return true
         }
 
+
+
         var drawBackground = true
         override fun onDraw(canvas: Canvas) {
-
-            canvas.drawRGB(0, 0, 0)
-            val pincell = Paint()
-            pincell.setStrokeWidth(4f)
-            pincell.setARGB(
-                255,
-                (Math.random() * 255).toInt(),
-                (Math.random() * 255).toInt(),
-                (Math.random() * 255).toInt()
-            )
-            val roundPincell = Paint()
-            roundPincell.setARGB(255, 255, 0, 0)
-            roundPincell.setStyle(Paint.Style.STROKE);
+            canvas.drawColor(ContextCompat.getColor(context, R.color.colorPrimaryDark))
+//            val pincell = Paint()
+//            pincell.strokeWidth = 4f
+//            pincell.setARGB(
+//                255,
+//                (Math.random() * 255).toInt(),
+//                (Math.random() * 255).toInt(),
+//                (Math.random() * 255).toInt()
+//            )
+//            val roundPincell = Paint()
+//            roundPincell.setARGB(255, 255, 0, 0)
+//            roundPincell.style = Paint.Style.STROKE
             //center.set(center.x + hexHorizAlign, center.y + hexVertAlign)
             //var bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.mygod)
             //canvas.drawBitmap(bitmap, 100f, 100f, pincell)
             //drawHex(center, size, pincell, canvas)
 
             for (elem in hexagonesList) {
-                pincell.color = elem.getColor()
+                //pincell.color = elem.getColor()
                 elem.draw(canvas)
                 //canvas.drawCircle(elem.center.x, elem.center.y, side__, roundPincell)
                 println(elem.sideLen)
             }
+
+
         }
+
     }
 
     private fun nextPlayer() {

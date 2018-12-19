@@ -10,8 +10,9 @@ class LoadingActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_loading)
-        hideSystemUI(window)
     }
+
+
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)
@@ -24,8 +25,8 @@ class LoadingActivity : AppCompatActivity() {
             val openGameActivity = Intent(this, GameActivity::class.java)
             openGameActivity.putParcelableArrayListExtra("players", intent.getParcelableArrayListExtra("players"))
             startActivity(openGameActivity)
-            //TODO: ну это страшно
         }, 50)
+        hideSystemUI(window)
     }
 
 

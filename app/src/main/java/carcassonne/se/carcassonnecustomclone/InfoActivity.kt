@@ -10,6 +10,10 @@ class InfoActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_info)
         setButtonListeners()
+    }
+
+    override fun onResume() {
+        super.onResume()
         hideSystemUI(window)
     }
 

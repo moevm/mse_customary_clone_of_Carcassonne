@@ -25,7 +25,6 @@ class LoadingActivity : AppCompatActivity() {
             val openGameActivity = Intent(this, GameActivity::class.java)
             openGameActivity.putParcelableArrayListExtra("players", intent.getParcelableArrayListExtra("players"))
             startActivity(openGameActivity)
-            //TODO: ну это страшно
         }, 50)
         hideSystemUI(window)
     }

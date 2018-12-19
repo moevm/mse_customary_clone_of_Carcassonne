@@ -52,6 +52,11 @@ class ChangeNameDialog : DialogFragment() {
 
     //Проверяет уникально ли новое имя
     private fun isNameUnique(name: String): Boolean {
-        return players?.any { it.name.trim() == name.trim() } != false
+        val foundPlayer = players?.find { it.name.trim() == name.trim() }
+        if(foundPlayer != player) {
+            return true
+        }
+        return false
+
     }
 }

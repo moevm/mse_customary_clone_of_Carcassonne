@@ -31,26 +31,24 @@ class TilesDialog : DialogFragment() {
                 val tile = ImageView(activity)
                 tile.setImageResource(R.drawable.castle1)
                 val imageParams = TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT)
-                imageParams.width = dpToPx(100)
-                imageParams.height = dpToPx(100)
+                imageParams.width = resources.getDimension(R.dimen.remaining_tile_size).toInt()
+                imageParams.height = resources.getDimension(R.dimen.remaining_tile_size).toInt()
                 tile.layoutParams = imageParams
                 tileRow.addView(tile)
                 val count = TextView(activity, null, 0, R.style.PlayerName)
+                count.textSize = resources.getDimension(R.dimen.small_text_size) / resources.displayMetrics.density
                 count.text = "2/3"
                 count.gravity = Gravity.CENTER_HORIZONTAL
                 val countParams = TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT)
-                countParams.width = dpToPx(100)
+                countParams.width = resources.getDimension(R.dimen.remaining_tile_size).toInt()
                 countRow.addView(count)
             }
             tiles.addView(tileRow, params)
             tiles.addView(countRow, params)
-            //TODO: все значения задавать в ресурсах а не хардкодить
         }
     }
 
-    private fun dpToPx(dp: Int): Int {
-        return (dp * resources.displayMetrics.density + 0.5f).toInt()
-    }
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         hideDialogSystemUI(dialog, activity)

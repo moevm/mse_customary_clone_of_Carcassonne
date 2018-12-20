@@ -29,7 +29,7 @@ class TilesDialog : DialogFragment() {
             countRow.layoutParams = params
             for(j in 1..4) {
                 val tile = ImageView(activity)
-                tile.setImageResource(R.drawable.castle1)
+                tile.setImageResource(R.drawable.tile1)
                 val imageParams = TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT)
                 imageParams.width = resources.getDimension(R.dimen.remaining_tile_size).toInt()
                 imageParams.height = resources.getDimension(R.dimen.remaining_tile_size).toInt()

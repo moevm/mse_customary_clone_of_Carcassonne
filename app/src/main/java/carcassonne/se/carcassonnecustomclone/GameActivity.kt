@@ -10,6 +10,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.widget.LinearLayout
 import kotlinx.android.synthetic.main.activity_game.*
+import java.lang.Exception
 import kotlin.math.abs
 import kotlin.math.sqrt
 
@@ -79,104 +80,29 @@ class GameActivity : AppCompatActivity() {
         var yTilesMax: Int = 0
 
         constructor(context: Context) : super(context) {
-            var sidesOfTile = ArrayList<sideType>(6)
-            for(i in 0..5)
-                sidesOfTile.add(sideType.EMPTY)
+            val tileResources = resources.getStringArray(R.array.TilesInfo)
 
-            tiles.add(
-                TileInfo(
-                    BitmapFactory.decodeResource(resources, R.drawable.wall1),
-                    sidesOfTile
-                )
-            )
+            for (i in 0 until tileResources.size) {
+                var tileDrawableId: Int = 0
+                try {
+                    tileDrawableId = resources.getIdentifier("tile${i + 1}", "drawable", context.packageName)
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+                val tileSidesType = ArrayList<sideType>()
+                for (j in 0..5) {
+                    tileSidesType.add(sideType.values()[tileResources[i][j].toString().toInt()])
+                }
+                tiles.add(TileInfo(BitmapFactory.decodeResource(resources, tileDrawableId), tileSidesType))
+            }
 
-            tiles.add(
-                TileInfo(
-                    BitmapFactory.decodeResource(resources, R.drawable.wall2),
-                    sidesOfTile
-                )
-            )
-
-            tiles.add(
-                TileInfo(
-                    BitmapFactory.decodeResource(resources, R.drawable.wall3),
-                    sidesOfTile
-                )
-            )
-
-            tiles.add(
-                TileInfo(
-                    BitmapFactory.decodeResource(resources, R.drawable.wall4),
-                    sidesOfTile
-                )
-            )
-
-            tiles.add(
-                TileInfo(
-                    BitmapFactory.decodeResource(resources, R.drawable.wall5),
-                    sidesOfTile
-                )
-            )
-
-            tiles.add(
-                TileInfo(
-                    BitmapFactory.decodeResource(resources, R.drawable.castle1),
-                    sidesOfTile
-                )
-            )
-
-            tiles.add(
-                TileInfo(
-                    BitmapFactory.decodeResource(resources, R.drawable.castle2),
-                    sidesOfTile
-                )
-            )
-
-            tiles.add(
-                TileInfo(
-                    BitmapFactory.decodeResource(resources, R.drawable.castle3),
-                    sidesOfTile
-                )
-            )
-
-            tiles.add(
-                TileInfo(
-                    BitmapFactory.decodeResource(resources, R.drawable.castle4),
-                    sidesOfTile
-                )
-            )
-
-            tiles.add(
-                TileInfo(
-                    BitmapFactory.decodeResource(resources, R.drawable.castle5),
-                    sidesOfTile
-                )
-            )
-
-            tiles.add(
-                TileInfo(
-                    BitmapFactory.decodeResource(resources, R.drawable.cityblock1),
-                    sidesOfTile
-                )
-            )
-
-            tiles.add(
-                TileInfo(
-                    BitmapFactory.decodeResource(resources, R.drawable.cityblock2),
-                    sidesOfTile
-                )
-            )
-
-            tiles.add(
-                TileInfo(
-                    BitmapFactory.decodeResource(resources, R.drawable.cityblock3),
-                    sidesOfTile
-                )
-            )
-
+            val defaultSides = ArrayList<sideType>()
+            for (i in 0..5) {
+                defaultSides.add(sideType.EMPTY)
+            }
             defaultTile = TileInfo(
                     BitmapFactory.decodeResource(resources, R.drawable.default_tile),
-                    sidesOfTile
+                    defaultSides
             )
 
             currentTile = getNextTile()

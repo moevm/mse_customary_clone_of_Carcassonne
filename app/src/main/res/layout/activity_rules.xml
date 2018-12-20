@@ -17,11 +17,26 @@
               app:layout_constraintRight_toRightOf="parent"/>
 
 
-    <TextView android:layout_width="match_parent"
-              android:layout_height="0dp"
-              style="@style/TextAreaStyle"
-              app:layout_constraintTop_toBottomOf="@id/title"
-              app:layout_constraintBottom_toTopOf="@id/backButton"/>
+    <ScrollView android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:padding="@dimen/default_padding"
+                app:layout_constraintTop_toBottomOf="@id/title"
+                style="@style/TextAreaStyle"
+                app:layout_constraintBottom_toTopOf="@id/backButton"
+
+    >
+
+        <TextView android:layout_width="match_parent"
+                  android:layout_height="match_parent"
+                  android:id="@+id/rulesText"
+                  android:textSize="@dimen/default_text_size"
+                  android:textColor="#000000"
+        />
+
+
+    </ScrollView>
+
+
 
     <Button style="@style/MenuButtonStyle"
             android:text="@string/back"

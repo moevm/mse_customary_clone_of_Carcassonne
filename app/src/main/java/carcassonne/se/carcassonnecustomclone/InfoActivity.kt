@@ -2,7 +2,8 @@ package carcassonne.se.carcassonnecustomclone
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import kotlinx.android.synthetic.main.activity_players.*
+import android.text.Html
+import kotlinx.android.synthetic.main.activity_info.*
 
 class InfoActivity : AppCompatActivity() {
 
@@ -10,6 +11,8 @@ class InfoActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_info)
         setButtonListeners()
+        infoText.text = Html.fromHtml(resources.getString(R.string.info_text))
+
     }
 
     override fun onResume() {

@@ -13,7 +13,6 @@ import kotlinx.android.synthetic.main.activity_game.*
 import kotlin.math.abs
 import kotlin.math.sqrt
 
-
 class GameActivity : AppCompatActivity() {
 
     private var players: ArrayList<PlayerInfo>? = null
@@ -27,7 +26,7 @@ class GameActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setFullscreenMode(window)
         setContentView(R.layout.activity_game)
-        val layout1 = findViewById(R.id.layout1) as ConstraintLayout
+        val layout1 = findViewById<ConstraintLayout>(R.id.layout1)
         val canvass = Canvass(this)
         layout1.addView(canvass)
         setButtonListeners()
@@ -70,9 +69,129 @@ class GameActivity : AppCompatActivity() {
     }
 
     class Canvass : View {
-        var side__ = 140f
-        var hexagonesList = ArrayList<Hexagon>(0)
+        var side__ = 100f
+        var hexagonesList = ArrayList<ArrayList<Hexagon>>(0)
         var shouldInit = true
+        var tiles: ArrayList<TileInfo> = ArrayList()
+        var defaultTile: TileInfo
+        var currentTile: TileInfo
+        var xTilesMax: Int = 0
+        var yTilesMax: Int = 0
+
+        constructor(context: Context) : super(context) {
+            var sidesOfTile = ArrayList<sideType>(6)
+            for(i in 0..5)
+                sidesOfTile.add(sideType.EMPTY)
+
+            tiles.add(
+                TileInfo(
+                    BitmapFactory.decodeResource(resources, R.drawable.wall1),
+                    sidesOfTile
+                )
+            )
+
+            tiles.add(
+                TileInfo(
+                    BitmapFactory.decodeResource(resources, R.drawable.wall2),
+                    sidesOfTile
+                )
+            )
+
+            tiles.add(
+                TileInfo(
+                    BitmapFactory.decodeResource(resources, R.drawable.wall3),
+                    sidesOfTile
+                )
+            )
+
+            tiles.add(
+                TileInfo(
+                    BitmapFactory.decodeResource(resources, R.drawable.wall4),
+                    sidesOfTile
+                )
+            )
+
+            tiles.add(
+                TileInfo(
+                    BitmapFactory.decodeResource(resources, R.drawable.wall5),
+                    sidesOfTile
+                )
+            )
+
+            tiles.add(
+                TileInfo(
+                    BitmapFactory.decodeResource(resources, R.drawable.castle1),
+                    sidesOfTile
+                )
+            )
+
+            tiles.add(
+                TileInfo(
+                    BitmapFactory.decodeResource(resources, R.drawable.castle2),
+                    sidesOfTile
+                )
+            )
+
+            tiles.add(
+                TileInfo(
+                    BitmapFactory.decodeResource(resources, R.drawable.castle3),
+                    sidesOfTile
+                )
+            )
+
+            tiles.add(
+                TileInfo(
+                    BitmapFactory.decodeResource(resources, R.drawable.castle4),
+                    sidesOfTile
+                )
+            )
+
+            tiles.add(
+                TileInfo(
+                    BitmapFactory.decodeResource(resources, R.drawable.castle5),
+                    sidesOfTile
+                )
+            )
+
+            tiles.add(
+                TileInfo(
+                    BitmapFactory.decodeResource(resources, R.drawable.cityblock1),
+                    sidesOfTile
+                )
+            )
+
+            tiles.add(
+                TileInfo(
+                    BitmapFactory.decodeResource(resources, R.drawable.cityblock2),
+                    sidesOfTile
+                )
+            )
+
+            tiles.add(
+                TileInfo(
+                    BitmapFactory.decodeResource(resources, R.drawable.cityblock3),
+                    sidesOfTile
+                )
+            )
+
+            defaultTile = TileInfo(
+                    BitmapFactory.decodeResource(resources, R.drawable.default_tile),
+                    sidesOfTile
+            )
+
+            currentTile = getNextTile()
+        }
+
+        fun getNextTile(): TileInfo
+        {
+            if(tiles.size == 0)
+                return defaultTile
+            val rand = (Math.random() * tiles.size).toInt()
+            val result = tiles[rand]
+            tiles.removeAt(rand)
+            return result
+        }
+
         override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
             super.onLayout(changed, l, t, r, b)
             if (shouldInit) {
@@ -87,44 +206,26 @@ class GameActivity : AppCompatActivity() {
 
                 var hexVertAlign = 3f / 2 * size
                 var hexHorizAlign = (sqrt(3f) / 2) * size
-                var bitmap1 = BitmapFactory.decodeResource(resources, R.drawable.wall1)
-                var bitmap2 = BitmapFactory.decodeResource(resources, R.drawable.wall2)
-                var bitmap3 = BitmapFactory.decodeResource(resources, R.drawable.wall3)
-                var bitmap4 = BitmapFactory.decodeResource(resources, R.drawable.wall4)
-                var bitmap5 = BitmapFactory.decodeResource(resources, R.drawable.wall5)
-                var bitmap6 = BitmapFactory.decodeResource(resources, R.drawable.castle1)
-                var bitmap7 = BitmapFactory.decodeResource(resources, R.drawable.castle2)
-                var bitmap8 = BitmapFactory.decodeResource(resources, R.drawable.castle3)
-                var bitmap9 = BitmapFactory.decodeResource(resources, R.drawable.castle4)
-                var bitmap10 = BitmapFactory.decodeResource(resources, R.drawable.castle5)
-                var bitmap11 = BitmapFactory.decodeResource(resources, R.drawable.cityblock1)
-                var bitmap12 = BitmapFactory.decodeResource(resources, R.drawable.cityblock2)
-                var bitmap13 = BitmapFactory.decodeResource(resources, R.drawable.cityblock3)
+
+
+
+
                 while ((center.y + hexVertAlign) < alto) {
+                    hexagonesList.add(ArrayList(0))
                     while ((center.x + hexHorizAlign) < ancho) {
-                        var bitmap : Bitmap = when((Math.random() * ((14 + 1) - 0) + 0).toInt()) {
-                            0-> bitmap1
-                            1-> bitmap2
-                            2-> bitmap3
-                            3-> bitmap4
-                            4-> bitmap5
-                            5-> bitmap6
-                            6-> bitmap7
-                            7-> bitmap8
-                            8-> bitmap9
-                            9-> bitmap10
-                            10-> bitmap11
-                            11-> bitmap12
-                            12-> bitmap13
-                            else-> bitmap12
-                        }
-                        hexagonesList.add(
+
+                        hexagonesList.last().add(
                             Hexagon(
-                                center.x, center.y, size, Color.argb(
+                                center.x,
+                                center.y,
+                                size,
+                                Color.argb(
                                     255, (Math.random() * 255).toInt(),
                                     (Math.random() * 255).toInt(), (Math.random() * 255).toInt()
-                                ), bitmap,
-                                true
+                                ),
+                                defaultTile.bitmap,
+                                defaultTile.sides,
+                                false
                             )
                         )
                         center.x += (hexHorizAlign * 2) + 4
@@ -143,9 +244,83 @@ class GameActivity : AppCompatActivity() {
                 shouldInit = false
             }
             println("hello")
+            xTilesMax = hexagonesList[0].size-1
+            yTilesMax = hexagonesList.size-1
         }
 
-        constructor(context: Context) : super(context)
+        // ШТО ДЕЛОТЬ ИЛИ ТЫ ЗАБЫЛ ИЛИ ТЫ НЕ ЗНАЛ?
+        // 1. Берём рандомный битмап и выставляем его на карту, кнопки поворота опционально или шото вроде
+        // 2. Проверку на возможность установить гекс
+        // 3. Поле шире чем экран
+        // 4. Придётся прихуярить нормальную структуру почти везде,но ок
+        // 5. Ебать копать пиздец дарова
+
+
+        fun getAdjacentHex(hexIndex: Point, sideId: Int): Point
+        {
+            var isOdd = false
+            var result = Point()
+            if(hexIndex.y % 2 == 0)
+            {
+                isOdd = true
+            }
+
+            if(sideId == 0)
+            {
+                result.x = hexIndex.x
+                result.y = hexIndex.y - 1
+            }
+            else if(sideId == 1)
+            {
+                result.x = hexIndex.x + 1
+                result.y = hexIndex.y
+                return result
+            }
+            else if(sideId == 2)
+            {
+                result.x = hexIndex.x
+                result.y = hexIndex.y + 1
+            }
+            else if(sideId == 3)
+            {
+                result.x = hexIndex.x - 1
+                result.y = hexIndex.y + 1
+            }
+            else if(sideId == 4)
+            {
+                result.x = hexIndex.x - 1
+                result.y = hexIndex.y
+                return result
+            }
+            else if(sideId == 5)
+            {
+                result.x = hexIndex.x - 1
+                result.y = hexIndex.y - 1
+            }
+            if(!isOdd)
+            {
+                result.x += 1
+            }
+            return result
+        }
+
+        fun checkCoordsOverflow(coords: Point) : Boolean
+        {
+            var tmp = coords.x
+            if(coords.y % 2 != 0)
+            {
+                tmp+=1
+            }
+
+            if(coords.x < 0 || coords.y < 0)
+                return true
+
+
+            if(tmp > xTilesMax || coords.y > yTilesMax)
+                return true
+
+            return false
+        }
 
         fun getHexToPointDist(hexCenter: PointF, destPoint: PointF): Float {
             var deltaX = hexCenter.x - destPoint.x
@@ -153,30 +328,35 @@ class GameActivity : AppCompatActivity() {
             return (deltaX * deltaX) + (deltaY * deltaY)
         }
 
-        fun getIndexHexOnTap(destPoint: PointF, radius: Float): Int {
-            var bestIndex: Int = -1
+        fun getIndexHexOnTap(destPoint: PointF, radius: Float): Point {
+            var result = Point(-1,-1)
             var bestDistance: Float = -1f
             for (i in 0..hexagonesList.size - 1) {
-                if (((hexagonesList[i].center.x - destPoint.x) >= abs(radius)) || ((hexagonesList[i].center.y - destPoint.y) >= abs(
-                        radius
-                    ))
-                )
-                    continue
+                for(j in 0..hexagonesList[i].size-1){
 
-                var res = getHexToPointDist(hexagonesList[i].center, destPoint)
-                if ((radius * radius >= res)) {
-                    if (bestDistance == -1f) {
-                        bestDistance = res
-                        bestIndex = i
-                    } else if (res < bestDistance) {
-                        bestDistance = res
-                        bestIndex = i
-                        break
+                    if (((hexagonesList[i][j].center.x - destPoint.x) >= abs(radius)) || ((hexagonesList[i][j].center.y - destPoint.y) >= abs(
+                            radius
+                        ))
+                    )
+                        continue
+
+                    var res = getHexToPointDist(hexagonesList[i][j].center, destPoint)
+                    if ((radius * radius >= res)) {
+                        if (bestDistance == -1f) {
+                            bestDistance = res
+                            result.x = j
+                            result.y = i
+                        } else if (res < bestDistance) {
+                            bestDistance = res
+                            result.x = j
+                            result.y = i
+                            return result
+                        }
+
                     }
-
                 }
             }
-            return bestIndex
+            return result
         }
 
         override fun onTouchEvent(event: MotionEvent): Boolean {
@@ -193,9 +373,23 @@ class GameActivity : AppCompatActivity() {
             when (event.actionMasked) {
                 MotionEvent.ACTION_DOWN -> {
                     var res = getIndexHexOnTap(PointF(event.x, event.y), side__)
-                    if (res != -1)
+                    if (res.x != -1)
+                    {
+                        if(currentTile == defaultTile || hexagonesList[res.y][res.x].isChosen())
+                            return true
+                        hexagonesList[res.y][res.x].placeOnMap(currentTile)
+                        currentTile = getNextTile()
+                        for(i in 0..5)
+                        {
+                            var tmp = getAdjacentHex(res, i)
+                            if(checkCoordsOverflow(tmp))
+                                continue
+                            hexagonesList[tmp.y][tmp.x].show()
+                        }
+                    }
+
 //                        if (!hexagonesList[res].isChosen())
-                            hexagonesList[res].choose()
+                            //hexagonesList[res].choose()
 //                        else
 //                            hexagonesList[res].cancel()
                     invalidate()
@@ -213,7 +407,7 @@ class GameActivity : AppCompatActivity() {
 
             canvas.drawRGB(0, 0, 0)
             val pincell = Paint()
-            pincell.setStrokeWidth(4f)
+            pincell.strokeWidth = 4f
             pincell.setARGB(
                 255,
                 (Math.random() * 255).toInt(),
@@ -222,22 +416,31 @@ class GameActivity : AppCompatActivity() {
             )
             val roundPincell = Paint()
             roundPincell.setARGB(255, 255, 0, 0)
-            roundPincell.setStyle(Paint.Style.STROKE);
+            roundPincell.style = Paint.Style.STROKE
             //center.set(center.x + hexHorizAlign, center.y + hexVertAlign)
             //var bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.mygod)
             //canvas.drawBitmap(bitmap, 100f, 100f, pincell)
             //drawHex(center, size, pincell, canvas)
 
-            for (elem in hexagonesList) {
-                pincell.color = elem.getColor()
-                elem.draw(canvas)
-                //canvas.drawCircle(elem.center.x, elem.center.y, side__, roundPincell)
-                println(elem.sideLen)
+            for (hexagonesString in hexagonesList) {
+                for (elem in hexagonesString)
+                {
+                    pincell.color = elem.getColor()
+                    elem.draw(canvas)
+                    //canvas.drawCircle(elem.center.x, elem.center.y, side__, roundPincell)
+                    println(elem.sideLen)
+
+                }
             }
         }
     }
 
     private fun setButtonListeners() {
+        currentTileImage.setOnClickListener{
+
+        }
+
+
         pauseButton.setOnClickListener {
             showPauseDialog()
         }

@@ -70,7 +70,7 @@ class GameActivity : AppCompatActivity() {
     }
 
     class Canvass : View {
-        var side__ = 100f
+        var side__ = 66f
         var hexagonesList = ArrayList<ArrayList<Hexagon>>(0)
         var shouldInit = true
         var tiles: ArrayList<TileInfo> = ArrayList()
@@ -306,15 +306,19 @@ class GameActivity : AppCompatActivity() {
                     {
                         if(currentTile == defaultTile || hexagonesList[res.y][res.x].isChosen())
                             return true
-                        hexagonesList[res.y][res.x].placeOnMap(currentTile)
-                        currentTile = getNextTile()
                         for(i in 0..5)
                         {
                             var tmp = getAdjacentHex(res, i)
                             if(checkCoordsOverflow(tmp))
                                 continue
-                            hexagonesList[tmp.y][tmp.x].show()
+
+                            var currSide: sideType = currentTile.sides[i]
+                            var adjacentSide: sideType = hexagonesList[tmp.y][tmp.x].sides[(i+3)%6]
+                            if((currSide != adjacentSide) && (adjacentSide != sideType.EMPTY))
+                                return true
                         }
+                        hexagonesList[res.y][res.x].placeOnMap(currentTile)
+                        currentTile = getNextTile()
                     }
 
 //                        if (!hexagonesList[res].isChosen())

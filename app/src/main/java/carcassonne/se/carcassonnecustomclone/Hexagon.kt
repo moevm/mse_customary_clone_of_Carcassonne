@@ -25,7 +25,7 @@ class Hexagon(X: Float, Y: Float, side: Float, roundColor: Int, patternBitmap: B
     private var bitmap: Bitmap
     private var tapCounter: Int = 0
     private var realBitmap: Bitmap
-    private var sides: ArrayList<sideType>
+    var sides: ArrayList<sideType>
 
     init {
         center = PointF(X, Y)

@@ -4,11 +4,9 @@ package carcassonne.se.carcassonnecustomclone
 import android.content.Context
 import android.graphics.*
 import android.os.Bundle
-import android.support.constraint.ConstraintLayout
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.util.DisplayMetrics
-import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
@@ -16,7 +14,6 @@ import android.widget.LinearLayout
 import carcassonne.se.carcassonnecustomclone.zoom.ZoomLayout
 import kotlinx.android.synthetic.main.activity_game.*
 import kotlinx.android.synthetic.main.activity_game.view.*
-import java.lang.Exception
 import kotlin.math.abs
 import kotlin.math.sqrt
 
@@ -39,6 +36,7 @@ class GameActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game)
         val canvass = Canvass(this)
+        canvass.activity = this
         canvass.layoutParams = ViewGroup.LayoutParams(4000, 4000)
         zoomLayout.addView(canvass)
         setButtonListeners()
@@ -89,6 +87,10 @@ class GameActivity : AppCompatActivity() {
         pauseDialog.show(supportFragmentManager, "PauseDialog")
     }
 
+    fun setCurrentTile(bitmap: Bitmap) {
+        currentTileView.setImageBitmap(bitmap)
+    }
+
     class Canvass : View {
         var side__ = 180f
         private var zoomContainer: ZoomLayout? = null
@@ -99,6 +101,7 @@ class GameActivity : AppCompatActivity() {
         var currentTile: TileInfo
         var xTilesMax: Int = 0
         var yTilesMax: Int = 0
+        var activity: GameActivity? = null
 
         constructor(context: Context) : super(context) {
             val tileResources = resources.getStringArray(R.array.TilesInfo)
@@ -293,9 +296,6 @@ class GameActivity : AppCompatActivity() {
             return result
         }
 
-        val MAX_CLICK_DISTANCE = 20
-        var pressedX = 0f
-        var pressedY = 0f
         private val MAX_CLICK_DURATION = 300
         private var timeDown = 0L
 
@@ -325,6 +325,8 @@ class GameActivity : AppCompatActivity() {
                             }
                             hexagonesList[res.y][res.x].placeOnMap(currentTile)
                             currentTile = getNextTile()
+                            activity?.setCurrentTile(currentTile.bitmap)
+
                         }
 
 //                        if (!hexagonesList[res].isChosen())
@@ -416,7 +418,7 @@ class GameActivity : AppCompatActivity() {
 
 
     private fun setButtonListeners() {
-        currentTile.setOnClickListener {
+        currentTileView.setOnClickListener {
 
         }
 

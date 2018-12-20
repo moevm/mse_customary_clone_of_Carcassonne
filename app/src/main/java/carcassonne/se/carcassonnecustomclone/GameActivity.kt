@@ -93,7 +93,9 @@ class GameActivity : AppCompatActivity() {
                 for (j in 0..5) {
                     tileSidesType.add(sideType.values()[tileResources[i][j].toString().toInt()])
                 }
-                tiles.add(TileInfo(BitmapFactory.decodeResource(resources, tileDrawableId), tileSidesType))
+                for (j in 0 until tileResources[i][6].toString().toInt()) {
+                    tiles.add(TileInfo(BitmapFactory.decodeResource(resources, tileDrawableId), tileSidesType))
+                }
             }
 
             val defaultSides = ArrayList<sideType>()

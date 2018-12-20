@@ -12,6 +12,8 @@
 
 
     <string-array name="TilesInfo">
+        <item>0122214</item>
+        <item>0211124</item>
         <item>4444444</item>
         <item>4444444</item>
         <item>4444444</item>
@@ -28,9 +30,6 @@
         <item>4444444</item>
         <item>4444444</item>
         <item>4444444</item>
-        <item>4444444</item>
-        <item>4444444</item>
-
     </string-array>
 
 

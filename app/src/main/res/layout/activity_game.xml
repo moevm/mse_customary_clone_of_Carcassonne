@@ -46,9 +46,9 @@
                                                            app:horizontalPanEnabled="true"
                                                            app:verticalPanEnabled="true"
                                                            app:zoomEnabled="true"
-                                                           app:minZoom="3"
+                                                           app:minZoom="10.0"
                                                            app:minZoomType="zoom"
-                                                           app:maxZoom="7.0"
+                                                           app:maxZoom="100.0"
                                                            app:maxZoomType="zoom"
                                                            app:hasClickableChildren="false"
     />
@@ -58,7 +58,6 @@
 
     <Button android:layout_width="@dimen/game_button_size"
             android:layout_height="@dimen/game_button_size"
-            android:text="68/72"
             android:textSize="@dimen/small_text_size"
             android:fontFamily="@font/aclonica"
             android:id="@+id/remainingTiles"

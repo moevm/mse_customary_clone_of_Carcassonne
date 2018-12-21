@@ -43,7 +43,6 @@ class GameActivity : AppCompatActivity() {
         setButtonListeners()
         players = intent.getParcelableArrayListExtra("players")
         displayPlayers()
-        //currentTile.setTile(R.drawable.castle1)
         nextPlayer()
         hideOkButton()
         hideDeclineButton()
@@ -81,11 +80,9 @@ class GameActivity : AppCompatActivity() {
         Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
     }
 
-
     private fun pxToDp(px: Int): Int {
         return (px / resources.displayMetrics.density + 0.5f).toInt()
     }
-
 
     private fun showPauseDialog() {
         val pauseDialog = PauseDialog()
@@ -153,10 +150,7 @@ class GameActivity : AppCompatActivity() {
                 BitmapFactory.decodeResource(resources, R.drawable.start_tile),
                 startTileSides
             )
-
             currentTile = getNextTile()
-
-
         }
 
         fun getNextTile(): TileInfo {
@@ -172,7 +166,6 @@ class GameActivity : AppCompatActivity() {
             super.onLayout(changed, l, t, r, b)
             zoomContainer = parent as ZoomLayout
             if (shouldInit) {
-                //Here you can get the size!
                 val ancho = width
                 val alto = height
                 var oddFlag = true
@@ -183,9 +176,6 @@ class GameActivity : AppCompatActivity() {
 
                 var hexVertAlign = 3f / 2 * size
                 var hexHorizAlign = (sqrt(3f) / 2) * size
-
-
-
 
                 while ((center.y + hexVertAlign) < alto) {
                     hexagonesList.add(ArrayList(0))
@@ -206,7 +196,6 @@ class GameActivity : AppCompatActivity() {
                             )
                         )
                         center.x += (hexHorizAlign * 2) + 4
-                        //println(center)
                     }
                     if (oddFlag) {
                         oddFlag = false
@@ -220,7 +209,6 @@ class GameActivity : AppCompatActivity() {
                 }
                 shouldInit = false
             }
-            //println("hello")
             xTilesMax = hexagonesList[0].size - 1
             yTilesMax = hexagonesList.size - 1
             activity?.setCurrentTile(currentTile.bitmap)
@@ -239,14 +227,6 @@ class GameActivity : AppCompatActivity() {
 
             hexagonesList[yTilesMax/2][xTilesMax/2].placeOnMap(startTile)
         }
-
-        // ШТО ДЕЛОТЬ ИЛИ ТЫ ЗАБЫЛ ИЛИ ТЫ НЕ ЗНАЛ?
-        // 1. Берём рандомный битмап и выставляем его на карту, кнопки поворота опционально или шото вроде
-        // 2. Проверку на возможность установить гекс
-        // 3. Поле шире чем экран
-        // 4. Придётся прихуярить нормальную структуру почти везде,но ок
-        // 5. Ебать копать пиздец дарова
-
 
         fun getAdjacentHex(hexIndex: Point, sideId: Int): Point {
             var isOdd = false
@@ -428,57 +408,22 @@ class GameActivity : AppCompatActivity() {
 
 
                         }
-
-//                        if (!hexagonesList[res].isChosen())
-                        //hexagonesList[res].choose()
-//                        else
-//                            hexagonesList[res].cancel()
                         invalidate()
-                        //hexagonesList.add(Hexagon(event.x, event.y, side__, Color.MAGENTA))
-                        //println(hexagonesList.last())
-                        //invalidate()
                     }
-
-
                 }
-
             }
             return true
         }
 
-
-        var drawBackground = true
         override fun onDraw(canvas: Canvas) {
             canvas.drawColor(ContextCompat.getColor(context, R.color.colorPrimaryDark))
-//            val pincell = Paint()
-//            pincell.strokeWidth = 4f
-//            pincell.setARGB(
-//                255,
-//                (Math.random() * 255).toInt(),
-//                (Math.random() * 255).toInt(),
-//                (Math.random() * 255).toInt()
-//            )
-//            val roundPincell = Paint()
-//            roundPincell.setARGB(255, 255, 0, 0)
-//            roundPincell.style = Paint.Style.STROKE
-            //center.set(center.x + hexHorizAlign, center.y + hexVertAlign)
-            //var bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.mygod)
-            //canvas.drawBitmap(bitmap, 100f, 100f, pincell)
-            //drawHex(center, size, pincell, canvas)
 
             for (hexagonesString in hexagonesList) {
                 for (elem in hexagonesString) {
-                    //pincell.color = elem.getColor()
                     elem.draw(canvas)
-                    //canvas.drawCircle(elem.center.x, elem.center.y, side__, roundPincell)
-                    //println(elem.sideLen)
-
                 }
             }
-
-
         }
-
     }
 
     private fun nextPlayer() {
@@ -517,17 +462,10 @@ class GameActivity : AppCompatActivity() {
         declineButton.visibility = View.INVISIBLE
     }
 
-
     private fun setButtonListeners() {
-
-
 
         pauseButton.setOnClickListener {
             showPauseDialog()
-        }
-
-
-        declineButton.setOnClickListener {
         }
 
         remainingTiles.setOnClickListener {

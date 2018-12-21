@@ -25,6 +25,9 @@ class Hexagon(X: Float, Y: Float, side: Float, roundColor: Int, patternBitmap: B
     private var bitmap: Bitmap
     private var tapCounter: Int = 0
     private var realBitmap: Bitmap
+    var tokenPlaced = false
+    var tokenXCoord = 0f
+    var tokenYCoord = 0f
     var sides: ArrayList<sideType>
 
     init {
@@ -46,6 +49,13 @@ class Hexagon(X: Float, Y: Float, side: Float, roundColor: Int, patternBitmap: B
         setBitmap(tile.bitmap)
         sides = tile.sides
         show()
+    }
+
+    fun removeFromMap(defaultTile: TileInfo)
+    {
+        setBitmap(defaultTile.bitmap)
+        sides = defaultTile.sides
+        hide()
     }
 
     fun updateBitmap()
@@ -139,12 +149,22 @@ class Hexagon(X: Float, Y: Float, side: Float, roundColor: Int, patternBitmap: B
         mPaint.setAlpha(alpha)
     }
 
+    fun placeToken(x: Float, y: Float, color: Int)
+    {
+        tokenPlaced = true
+        tokenXCoord = x
+        tokenYCoord = y
+        this.color = color
+        setColor(color)
+    }
 
     fun draw(canvas: Canvas) {
         canvas.drawPath(mPath, mPaint)
         if(this.isChosen())
         {
             canvas.drawBitmap(bitmap, center.x - (bitmap.width / 2), center.y - (bitmap.height / 2), mPaint)
+            if(tokenPlaced)
+                canvas.drawCircle(tokenXCoord, tokenYCoord, sideLen/5, mPaint)
         }
         //canvas.drawCircle( center.x - (realBitmap.width / 2), center.y - (realBitmap.height / 2), sideLen/10,mPaint)
         //parent invalidate();

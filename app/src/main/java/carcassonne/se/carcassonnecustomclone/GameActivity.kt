@@ -107,6 +107,8 @@ class GameActivity : AppCompatActivity() {
         var currentTile: TileInfo
         var xTilesMax: Int = 0
         var yTilesMax: Int = 0
+        var tilePlaced = false
+        var currentCoords = Point(0,0)
         var activity: GameActivity? = null
 
         constructor(context: Context) : super(context) {
@@ -226,6 +228,15 @@ class GameActivity : AppCompatActivity() {
                 currentTile.rotate()
                 activity?.setCurrentTile(currentTile.bitmap)
             }
+
+            activity?.okButton?.setOnClickListener {
+                nextTurn()
+            }
+
+            activity?.declineButton?.setOnClickListener {
+                cancelPlaceTile()
+            }
+
             hexagonesList[yTilesMax/2][xTilesMax/2].placeOnMap(startTile)
         }
 
@@ -327,6 +338,25 @@ class GameActivity : AppCompatActivity() {
         private val MAX_CLICK_DURATION = 300
         private var timeDown = 0L
 
+        fun nextTurn()
+        {
+            currentTile = getNextTile()
+            tilePlaced = false
+            activity?.setCurrentTile(currentTile.bitmap)
+            activity?.hideOkButton()
+            activity?.hideDeclineButton()
+            activity?.nextPlayer()
+        }
+
+        fun cancelPlaceTile()
+        {
+            tilePlaced = false
+            hexagonesList[currentCoords.y][currentCoords.x].removeFromMap(defaultTile)
+            activity?.hideOkButton()
+            activity?.hideDeclineButton()
+            invalidate()
+        }
+
         override fun onTouchEvent(event: MotionEvent): Boolean {
             when (event.actionMasked) {
                 MotionEvent.ACTION_DOWN -> {
@@ -338,7 +368,21 @@ class GameActivity : AppCompatActivity() {
                         val shiftY = (zoomContainer?.panY ?: 0f)
                         val zoom = (zoomContainer?.realZoom ?: 1f)
                         var res = getIndexHexOnTap(PointF(event.x / zoom - shiftX, event.y / zoom - shiftY), side__)
-                        if (res.x != -1) {
+                        if(tilePlaced) {
+                            if(res == currentCoords){
+                                if(activity?.currentPlayerInfo()?.figurineCount == 0)
+                                    return true
+
+                                hexagonesList[res.y][res.x].placeToken(event.x / zoom - shiftX, event.y / zoom - shiftY,
+                                    activity?.players!![activity?.currentPlayerIndex!!].color)
+                                activity?.currentPlayerInfo()?.figurineCount =
+                                        activity?.currentPlayerInfo()?.figurineCount!!.minus(1)
+
+                                nextTurn()
+
+                            }
+                        }
+                        else if (res.x != -1) {
                             if (currentTile == defaultTile || hexagonesList[res.y][res.x].isChosen())
                                 return true
 
@@ -364,9 +408,11 @@ class GameActivity : AppCompatActivity() {
                                 return true
 
                             hexagonesList[res.y][res.x].placeOnMap(currentTile)
-                            currentTile = getNextTile()
-                            activity?.setCurrentTile(currentTile.bitmap)
-                            activity?.nextPlayer()
+                            currentCoords = res
+                            tilePlaced = true
+                            activity?.showOkButton()
+                            activity?.showDeclineButton()
+
 
                         }
 
@@ -433,7 +479,7 @@ class GameActivity : AppCompatActivity() {
         makeToast("${players?.get(currentPlayerIndex)?.name} turn now")
     }
 
-    private fun currentPlayerInfo(): PlayerGameInfo? {
+    fun currentPlayerInfo(): PlayerGameInfo? {
         return if (currentPlayerIndex in 0..(players?.size ?: 0)) {
             (playerInfoArea.getChildAt(currentPlayerIndex) as PlayerGameInfo)
         } else {
@@ -466,8 +512,7 @@ class GameActivity : AppCompatActivity() {
         pauseButton.setOnClickListener {
             showPauseDialog()
         }
-        okButton.setOnClickListener {
-        }
+
 
         declineButton.setOnClickListener {
         }

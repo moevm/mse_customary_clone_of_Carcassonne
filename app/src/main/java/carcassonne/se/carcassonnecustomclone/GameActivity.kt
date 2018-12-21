@@ -3,6 +3,7 @@ package carcassonne.se.carcassonnecustomclone
 
 import android.content.Context
 import android.graphics.*
+import android.media.MediaPlayer
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
@@ -13,7 +14,6 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import carcassonne.se.carcassonnecustomclone.zoom.ZoomLayout
 import kotlinx.android.synthetic.main.activity_game.*
-import kotlinx.android.synthetic.main.activity_game.view.*
 import kotlin.math.abs
 import kotlin.math.sqrt
 
@@ -326,7 +326,7 @@ class GameActivity : AppCompatActivity() {
                             hexagonesList[res.y][res.x].placeOnMap(currentTile)
                             currentTile = getNextTile()
                             activity?.setCurrentTile(currentTile.bitmap)
-
+                            MediaPlayer.create(activity, R.raw.placetile).start()
                         }
 
 //                        if (!hexagonesList[res].isChosen())

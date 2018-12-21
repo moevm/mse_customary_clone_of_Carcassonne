@@ -3,40 +3,55 @@ package carcassonne.se.carcassonnecustomclone
 
 import android.content.Context
 import android.graphics.*
+import android.media.MediaPlayer
 import android.os.Bundle
-import android.support.constraint.ConstraintLayout
+import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
+import android.util.DisplayMetrics
 import android.view.MotionEvent
 import android.view.View
+import android.view.ViewGroup
 import android.widget.LinearLayout
+import android.widget.Toast
+import carcassonne.se.carcassonnecustomclone.zoom.ZoomLayout
 import kotlinx.android.synthetic.main.activity_game.*
 import kotlin.math.abs
 import kotlin.math.sqrt
 
-
 class GameActivity : AppCompatActivity() {
 
     private var players: ArrayList<PlayerInfo>? = null
+    private var currentPlayerIndex: Int = -1
+    private var field: Canvass? =  null
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)
         hideSystemUI(window)
     }
 
+    override fun onResume() {
+        super.onResume()
+        hideSystemUI(window)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        hideSystemUI(window)
         setContentView(R.layout.activity_game)
-        val layout1 = findViewById(R.id.layout1) as ConstraintLayout
         val canvass = Canvass(this)
-        layout1.addView(canvass)
+        canvass.activity = this
+        canvass.layoutParams = ViewGroup.LayoutParams(24000, 24000)
+        this.field = canvass
+        zoomLayout.addView(canvass)
         setButtonListeners()
         players = intent.getParcelableArrayListExtra("players")
         displayPlayers()
-        okButton.visibility = View.INVISIBLE
-        declineButton.visibility = View.INVISIBLE
+        nextPlayer()
+        hideOkButton()
+        hideDeclineButton()
+        updateRemainingTilesButton(field?.tiles?.size ?: 0)
     }
 
+    /*Добавляет игроков на панель игроков слева*/
     private fun displayPlayers() {
         players?.forEach {
             addPlayer(it)
@@ -51,32 +66,113 @@ class GameActivity : AppCompatActivity() {
 
     private fun addPlayer(playerInfo: PlayerInfo) {
         val player = PlayerGameInfo(this, playerInfo)
-        //TODO: сделать чтобы растягивалось равномерно
+        val dm = DisplayMetrics()
+        windowManager.defaultDisplay.getMetrics(dm)
+        val displayHeight = dm.heightPixels
+        val margin = pxToDp((displayHeight - resources.getDimension(R.dimen.menu_button_height).toInt() * 6) / 7)
         val params = LinearLayout.LayoutParams(
             LinearLayout.LayoutParams.WRAP_CONTENT,
             LinearLayout.LayoutParams.WRAP_CONTENT
         )
-        params.setMargins(0, 15, 0, 15)
+        params.setMargins(0, (margin * 1.5).toInt(), 0, 0)
         player.layoutParams = params
-
         playerInfoArea.addView(player)
     }
 
+    fun makeToast(text: String) {
+        Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun pxToDp(px: Int): Int {
+        return (px / resources.displayMetrics.density + 0.5f).toInt()
+    }
 
     private fun showPauseDialog() {
         val pauseDialog = PauseDialog()
-        //pauseDialog.parentActivity = this
         pauseDialog.show(supportFragmentManager, "PauseDialog")
     }
 
+    fun setCurrentTile(bitmap: Bitmap) {
+        currentTileView.setImageBitmap(bitmap)
+    }
+
     class Canvass : View {
-        var side__ = 140f
-        var hexagonesList = ArrayList<Hexagon>(0)
+        var side__ = 200f
+        private var zoomContainer: ZoomLayout? = null
+        var hexagonesList = ArrayList<ArrayList<Hexagon>>(0)
         var shouldInit = true
+        var tiles: ArrayList<TileInfo> = ArrayList()
+        var defaultTile: TileInfo
+        var startTile: TileInfo
+        var currentTile: TileInfo
+        var xTilesMax: Int = 0
+        var yTilesMax: Int = 0
+        var tilePlaced = false
+        var currentCoords = Point(0,0)
+        var activity: GameActivity? = null
+
+        constructor(context: Context) : super(context) {
+            val tileResources = resources.getStringArray(R.array.TilesInfo)
+
+            for (i in 0 until tileResources.size) {
+                var tileDrawableId = 0
+                try {
+                    tileDrawableId = resources.getIdentifier("tile${i + 1}", "drawable", context.packageName)
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+
+                var bitmap = BitmapFactory.decodeResource(resources, tileDrawableId)
+                bitmap = Bitmap.createScaledBitmap(bitmap, (side__ * sqrt(3f)).toInt(), (side__ * 2).toInt(), false)
+                for (j in 0 until tileResources[i][6].toString().toInt()) {
+                    val tileSidesType = ArrayList<sideType>()
+                    for (k in 0..5) {
+                        tileSidesType.add(sideType.values()[tileResources[i][k].toString().toInt()])
+                    }
+                    tiles.add(TileInfo(bitmap, tileSidesType))
+                }
+            }
+
+            val defaultSides = ArrayList<sideType>()
+            for (i in 0..5) {
+                defaultSides.add(sideType.EMPTY)
+            }
+            defaultTile = TileInfo(
+                BitmapFactory.decodeResource(resources, R.drawable.default_tile),
+                defaultSides
+            )
+
+            val startTileSides = ArrayList<sideType>()
+            startTileSides.add(sideType.TOWN)
+            startTileSides.add(sideType.ROAD)
+            startTileSides.add(sideType.FIELD)
+            startTileSides.add(sideType.TOWN)
+            startTileSides.add(sideType.ROAD)
+            startTileSides.add(sideType.FIELD)
+            startTile = TileInfo(
+                BitmapFactory.decodeResource(resources, R.drawable.start_tile),
+                startTileSides
+            )
+            currentTile = getNextTile()
+
+
+
+
+        }
+
+        fun getNextTile(): TileInfo {
+            if (tiles.size == 0)
+                return defaultTile
+            val rand = (Math.random() * tiles.size).toInt()
+            val result = tiles[rand]
+            tiles.removeAt(rand)
+            return result
+        }
+
         override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
             super.onLayout(changed, l, t, r, b)
+            zoomContainer = parent as ZoomLayout
             if (shouldInit) {
-                //Here you can get the size!
                 val ancho = width
                 val alto = height
                 var oddFlag = true
@@ -87,48 +183,26 @@ class GameActivity : AppCompatActivity() {
 
                 var hexVertAlign = 3f / 2 * size
                 var hexHorizAlign = (sqrt(3f) / 2) * size
-                var bitmap1 = BitmapFactory.decodeResource(resources, R.drawable.wall1)
-                var bitmap2 = BitmapFactory.decodeResource(resources, R.drawable.wall2)
-                var bitmap3 = BitmapFactory.decodeResource(resources, R.drawable.wall3)
-                var bitmap4 = BitmapFactory.decodeResource(resources, R.drawable.wall4)
-                var bitmap5 = BitmapFactory.decodeResource(resources, R.drawable.wall5)
-                var bitmap6 = BitmapFactory.decodeResource(resources, R.drawable.castle1)
-                var bitmap7 = BitmapFactory.decodeResource(resources, R.drawable.castle2)
-                var bitmap8 = BitmapFactory.decodeResource(resources, R.drawable.castle3)
-                var bitmap9 = BitmapFactory.decodeResource(resources, R.drawable.castle4)
-                var bitmap10 = BitmapFactory.decodeResource(resources, R.drawable.castle5)
-                var bitmap11 = BitmapFactory.decodeResource(resources, R.drawable.cityblock1)
-                var bitmap12 = BitmapFactory.decodeResource(resources, R.drawable.cityblock2)
-                var bitmap13 = BitmapFactory.decodeResource(resources, R.drawable.cityblock3)
+
                 while ((center.y + hexVertAlign) < alto) {
+                    hexagonesList.add(ArrayList(0))
                     while ((center.x + hexHorizAlign) < ancho) {
-                        var bitmap : Bitmap = when((Math.random() * ((14 + 1) - 0) + 0).toInt()) {
-                            0-> bitmap1
-                            1-> bitmap2
-                            2-> bitmap3
-                            3-> bitmap4
-                            4-> bitmap5
-                            5-> bitmap6
-                            6-> bitmap7
-                            7-> bitmap8
-                            8-> bitmap9
-                            9-> bitmap10
-                            10-> bitmap11
-                            11-> bitmap12
-                            12-> bitmap13
-                            else-> bitmap12
-                        }
-                        hexagonesList.add(
+
+                        hexagonesList.last().add(
                             Hexagon(
-                                center.x, center.y, size, Color.argb(
+                                center.x,
+                                center.y,
+                                size,
+                                Color.argb(
                                     255, (Math.random() * 255).toInt(),
                                     (Math.random() * 255).toInt(), (Math.random() * 255).toInt()
-                                ), bitmap,
-                                true
+                                ),
+                                defaultTile.bitmap,
+                                defaultTile.sides,
+                                false
                             )
                         )
                         center.x += (hexHorizAlign * 2) + 4
-                        println(center)
                     }
                     if (oddFlag) {
                         oddFlag = false
@@ -142,10 +216,74 @@ class GameActivity : AppCompatActivity() {
                 }
                 shouldInit = false
             }
-            println("hello")
+            xTilesMax = hexagonesList[0].size - 1
+            yTilesMax = hexagonesList.size - 1
+            activity?.setCurrentTile(currentTile.bitmap)
+            activity?.currentTileView?.setOnClickListener {
+                currentTile.rotate()
+                activity?.setCurrentTile(currentTile.bitmap)
+            }
+
+            activity?.okButton?.setOnClickListener {
+                nextTurn()
+            }
+
+            activity?.declineButton?.setOnClickListener {
+                cancelPlaceTile()
+            }
+
+            hexagonesList[yTilesMax/2][xTilesMax/2].placeOnMap(startTile)
         }
 
-        constructor(context: Context) : super(context)
+        fun getAdjacentHex(hexIndex: Point, sideId: Int): Point {
+            var isOdd = false
+            var result = Point()
+            if (hexIndex.y % 2 == 0) {
+                isOdd = true
+            }
+
+            if (sideId == 0) {
+                result.x = hexIndex.x
+                result.y = hexIndex.y - 1
+            } else if (sideId == 1) {
+                result.x = hexIndex.x + 1
+                result.y = hexIndex.y
+                return result
+            } else if (sideId == 2) {
+                result.x = hexIndex.x
+                result.y = hexIndex.y + 1
+            } else if (sideId == 3) {
+                result.x = hexIndex.x - 1
+                result.y = hexIndex.y + 1
+            } else if (sideId == 4) {
+                result.x = hexIndex.x - 1
+                result.y = hexIndex.y
+                return result
+            } else if (sideId == 5) {
+                result.x = hexIndex.x - 1
+                result.y = hexIndex.y - 1
+            }
+            if (!isOdd) {
+                result.x += 1
+            }
+            return result
+        }
+
+        fun checkCoordsOverflow(coords: Point): Boolean {
+            var tmp = coords.x
+            if (coords.y % 2 != 0) {
+                tmp += 1
+            }
+
+            if (coords.x < 0 || coords.y < 0)
+                return true
+
+
+            if (tmp > xTilesMax || coords.y > yTilesMax)
+                return true
+
+            return false
+        }
 
         fun getHexToPointDist(hexCenter: PointF, destPoint: PointF): Float {
             var deltaX = hexCenter.x - destPoint.x
@@ -153,104 +291,207 @@ class GameActivity : AppCompatActivity() {
             return (deltaX * deltaX) + (deltaY * deltaY)
         }
 
-        fun getIndexHexOnTap(destPoint: PointF, radius: Float): Int {
-            var bestIndex: Int = -1
+        fun getIndexHexOnTap(destPoint: PointF, radius: Float): Point {
+            var result = Point(-1, -1)
             var bestDistance: Float = -1f
             for (i in 0..hexagonesList.size - 1) {
-                if (((hexagonesList[i].center.x - destPoint.x) >= abs(radius)) || ((hexagonesList[i].center.y - destPoint.y) >= abs(
-                        radius
-                    ))
-                )
-                    continue
+                for (j in 0..hexagonesList[i].size - 1) {
 
-                var res = getHexToPointDist(hexagonesList[i].center, destPoint)
-                if ((radius * radius >= res)) {
-                    if (bestDistance == -1f) {
-                        bestDistance = res
-                        bestIndex = i
-                    } else if (res < bestDistance) {
-                        bestDistance = res
-                        bestIndex = i
-                        break
+                    if (((hexagonesList[i][j].center.x - destPoint.x) >= abs(radius)) || ((hexagonesList[i][j].center.y - destPoint.y) >= abs(
+                            radius
+                        ))
+                    )
+                        continue
+
+                    var res = getHexToPointDist(hexagonesList[i][j].center, destPoint)
+                    if ((radius * radius >= res)) {
+                        if (bestDistance == -1f) {
+                            bestDistance = res
+                            result.x = j
+                            result.y = i
+                        } else if (res < bestDistance) {
+                            bestDistance = res
+                            result.x = j
+                            result.y = i
+                            return result
+                        }
+
                     }
-
                 }
             }
-            return bestIndex
+            return result
+        }
+
+        private val MAX_CLICK_DURATION = 300
+        private var timeDown = 0L
+
+        fun nextTurn()
+        {
+            currentTile = getNextTile()
+            tilePlaced = false
+            activity?.setCurrentTile(currentTile.bitmap)
+            activity?.hideOkButton()
+            activity?.hideDeclineButton()
+            activity?.nextPlayer()
+            activity?.updateRemainingTilesButton(tiles.size)
+        }
+
+        fun cancelPlaceTile()
+        {
+            tilePlaced = false
+            hexagonesList[currentCoords.y][currentCoords.x].removeFromMap(defaultTile)
+            activity?.hideOkButton()
+            activity?.hideDeclineButton()
+            invalidate()
         }
 
         override fun onTouchEvent(event: MotionEvent): Boolean {
-            // MotionEvent reports input details from the touch screen
-            // and other input controls. In this case, you are only
-            // interested in events where the touch position  changed.
-
-            val x: Float = event.x
-            val y: Float = event.y
-
-            println(x)
-            println(y)
-            MotionEvent.ACTION_DOWN
             when (event.actionMasked) {
                 MotionEvent.ACTION_DOWN -> {
-                    var res = getIndexHexOnTap(PointF(event.x, event.y), side__)
-                    if (res != -1)
-//                        if (!hexagonesList[res].isChosen())
-                            hexagonesList[res].choose()
-//                        else
-//                            hexagonesList[res].cancel()
-                    invalidate()
-                    //hexagonesList.add(Hexagon(event.x, event.y, side__, Color.MAGENTA))
-                    //println(hexagonesList.last())
-                    //invalidate()
+                    timeDown = System.currentTimeMillis()
+                }
+                MotionEvent.ACTION_UP -> {
+                    if (System.currentTimeMillis() - timeDown < MAX_CLICK_DURATION) {
+                        val shiftX = (zoomContainer?.panX ?: 0f)
+                        val shiftY = (zoomContainer?.panY ?: 0f)
+                        val zoom = (zoomContainer?.realZoom ?: 1f)
+                        var res = getIndexHexOnTap(PointF(event.x / zoom - shiftX, event.y / zoom - shiftY), side__)
+                        if(tilePlaced) {
+                            if(res == currentCoords){
+                                if(activity?.currentPlayerInfo()?.figurineCount == 0) {
+                                    activity?.makeToast("You have no enough tokens for this")
+                                    return true
+                                }
+
+                                hexagonesList[res.y][res.x].placeToken(event.x / zoom - shiftX, event.y / zoom - shiftY,
+                                    activity?.players!![activity?.currentPlayerIndex!!].color)
+                                activity?.currentPlayerInfo()?.figurineCount =
+                                        activity?.currentPlayerInfo()?.figurineCount!!.minus(1)
+
+                                nextTurn()
+
+                            }
+                            else
+                            {
+                                activity?.makeToast("Last placed tile must be selected")
+                                return true
+                            }
+                        }
+                        else if (res.x != -1) {
+                            if (currentTile == defaultTile || hexagonesList[res.y][res.x].isChosen()) {
+                                activity?.makeToast("Tile can be placed only on empty space")
+                                return true
+                            }
+
+                            var emptyAroundCounter = 0
+                            for (i in 0..5) {
+                                var tmp = getAdjacentHex(res, i)
+                                if (checkCoordsOverflow(tmp)) {
+                                    emptyAroundCounter++
+                                    continue
+                                }
+
+                                var currSide: sideType = currentTile.sides[i]
+                                var adjacentSide: sideType = hexagonesList[tmp.y][tmp.x].sides[(i + 3) % 6]
+                                if(adjacentSide == sideType.EMPTY)
+                                    emptyAroundCounter++
+
+                                if ((currSide != adjacentSide) && (adjacentSide != sideType.EMPTY)) {
+                                    activity?.makeToast("Can't be placed here, check nearby tiles")
+                                    return true
+                                }
+
+                            }
+
+                            if(emptyAroundCounter==6) {
+                                activity?.makeToast("Can't be placed here, there are no tiles nearby")
+                                return true
+                            }
+
+                            hexagonesList[res.y][res.x].placeOnMap(currentTile)
+
+
+                            currentCoords = res
+                            tilePlaced = true
+                            activity?.showOkButton()
+                            activity?.showDeclineButton()
+
+
+
+
+                        }
+                        invalidate()
+                    }
                 }
             }
-
             return true
         }
 
-        var drawBackground = true
         override fun onDraw(canvas: Canvas) {
+            canvas.drawColor(ContextCompat.getColor(context, R.color.colorPrimaryDark))
 
-            canvas.drawRGB(0, 0, 0)
-            val pincell = Paint()
-            pincell.setStrokeWidth(4f)
-            pincell.setARGB(
-                255,
-                (Math.random() * 255).toInt(),
-                (Math.random() * 255).toInt(),
-                (Math.random() * 255).toInt()
-            )
-            val roundPincell = Paint()
-            roundPincell.setARGB(255, 255, 0, 0)
-            roundPincell.setStyle(Paint.Style.STROKE);
-            //center.set(center.x + hexHorizAlign, center.y + hexVertAlign)
-            //var bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.mygod)
-            //canvas.drawBitmap(bitmap, 100f, 100f, pincell)
-            //drawHex(center, size, pincell, canvas)
-
-            for (elem in hexagonesList) {
-                pincell.color = elem.getColor()
-                elem.draw(canvas)
-                //canvas.drawCircle(elem.center.x, elem.center.y, side__, roundPincell)
-                println(elem.sideLen)
+            for (hexagonesString in hexagonesList) {
+                for (elem in hexagonesString) {
+                    elem.draw(canvas)
+                }
             }
         }
     }
 
+    private fun nextPlayer() {
+        currentPlayerInfo()?.setCurrent(false)
+        if (currentPlayerIndex != players?.size?.minus(1)) {
+            currentPlayerIndex++
+        } else {
+            currentPlayerIndex = 0
+        }
+        currentPlayerInfo()?.setCurrent(true)
+        makeToast("${players?.get(currentPlayerIndex)?.name} turn now")
+    }
+
+    fun currentPlayerInfo(): PlayerGameInfo? {
+        return if (currentPlayerIndex in 0..(players?.size ?: 0)) {
+            (playerInfoArea.getChildAt(currentPlayerIndex) as PlayerGameInfo)
+        } else {
+            null
+        }
+    }
+
+
+    fun updateRemainingTilesButton(remTiles: Int) {
+        remainingTiles.text = "$remTiles/88"
+    }
+
+
+    private fun showOkButton() {
+        okButton.visibility = View.VISIBLE
+    }
+
+    private fun showDeclineButton() {
+        declineButton.visibility = View.VISIBLE
+    }
+
+    private fun hideOkButton() {
+        okButton.visibility = View.INVISIBLE
+    }
+
+    private fun hideDeclineButton() {
+        declineButton.visibility = View.INVISIBLE
+    }
+
+
     private fun setButtonListeners() {
+
+
         pauseButton.setOnClickListener {
             showPauseDialog()
-        }
-        okButton.setOnClickListener {
-
-        }
-
-        declineButton.setOnClickListener {
-
         }
 
         remainingTiles.setOnClickListener {
             val tilesDialog = TilesDialog()
+            if(field != null) {
+                tilesDialog.tileArray = field!!.tiles
+            }
             tilesDialog.show(supportFragmentManager, "TilesDialog")
         }
     }

@@ -46,9 +46,9 @@
                                                            app:horizontalPanEnabled="true"
                                                            app:verticalPanEnabled="true"
                                                            app:zoomEnabled="true"
-                                                           app:minZoom="3"
+                                                           app:minZoom="10.0"
                                                            app:minZoomType="zoom"
-                                                           app:maxZoom="7.0"
+                                                           app:maxZoom="100.0"
                                                            app:maxZoomType="zoom"
                                                            app:hasClickableChildren="false"
     />

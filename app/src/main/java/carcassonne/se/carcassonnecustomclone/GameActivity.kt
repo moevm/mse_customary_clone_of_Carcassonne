@@ -37,7 +37,7 @@ class GameActivity : AppCompatActivity() {
         setContentView(R.layout.activity_game)
         val canvass = Canvass(this)
         canvass.activity = this
-        canvass.layoutParams = ViewGroup.LayoutParams(4000, 4000)
+        canvass.layoutParams = ViewGroup.LayoutParams(24000, 24000)
         zoomLayout.addView(canvass)
         setButtonListeners()
         players = intent.getParcelableArrayListExtra("players")
@@ -92,12 +92,13 @@ class GameActivity : AppCompatActivity() {
     }
 
     class Canvass : View {
-        var side__ = 180f
+        var side__ = 200f
         private var zoomContainer: ZoomLayout? = null
         var hexagonesList = ArrayList<ArrayList<Hexagon>>(0)
         var shouldInit = true
         var tiles: ArrayList<TileInfo> = ArrayList()
         var defaultTile: TileInfo
+        var startTile: TileInfo
         var currentTile: TileInfo
         var xTilesMax: Int = 0
         var yTilesMax: Int = 0
@@ -113,12 +114,15 @@ class GameActivity : AppCompatActivity() {
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
-                val tileSidesType = ArrayList<sideType>()
-                for (j in 0..5) {
-                    tileSidesType.add(sideType.values()[tileResources[i][j].toString().toInt()])
-                }
-                val bitmap = BitmapFactory.decodeResource(resources, tileDrawableId)
+
+                var bitmap = BitmapFactory.decodeResource(resources, tileDrawableId)
+                var sideLen = 200f
+                bitmap = Bitmap.createScaledBitmap(bitmap, (sideLen * sqrt(3f)).toInt(), (sideLen * 2).toInt(), false)
                 for (j in 0 until tileResources[i][6].toString().toInt()) {
+                    val tileSidesType = ArrayList<sideType>()
+                    for (k in 0..5) {
+                        tileSidesType.add(sideType.values()[tileResources[i][k].toString().toInt()])
+                    }
                     tiles.add(TileInfo(bitmap, tileSidesType))
                 }
             }
@@ -132,7 +136,21 @@ class GameActivity : AppCompatActivity() {
                 defaultSides
             )
 
+            val startTileSides = ArrayList<sideType>()
+            startTileSides.add(sideType.TOWN)
+            startTileSides.add(sideType.ROAD)
+            startTileSides.add(sideType.FIELD)
+            startTileSides.add(sideType.TOWN)
+            startTileSides.add(sideType.ROAD)
+            startTileSides.add(sideType.FIELD)
+            startTile = TileInfo(
+                BitmapFactory.decodeResource(resources, R.drawable.start_tile),
+                startTileSides
+            )
+
             currentTile = getNextTile()
+
+
         }
 
         fun getNextTile(): TileInfo {
@@ -199,6 +217,12 @@ class GameActivity : AppCompatActivity() {
             println("hello")
             xTilesMax = hexagonesList[0].size - 1
             yTilesMax = hexagonesList.size - 1
+            activity?.setCurrentTile(currentTile.bitmap)
+            activity?.currentTileView?.setOnClickListener {
+                currentTile.rotate()
+                activity?.setCurrentTile(currentTile.bitmap)
+            }
+            hexagonesList[yTilesMax/2][xTilesMax/2].placeOnMap(startTile)
         }
 
         // ШТО ДЕЛОТЬ ИЛИ ТЫ ЗАБЫЛ ИЛИ ТЫ НЕ ЗНАЛ?
@@ -313,19 +337,32 @@ class GameActivity : AppCompatActivity() {
                         if (res.x != -1) {
                             if (currentTile == defaultTile || hexagonesList[res.y][res.x].isChosen())
                                 return true
+
+                            var emptyAroundCounter = 0
                             for (i in 0..5) {
                                 var tmp = getAdjacentHex(res, i)
-                                if (checkCoordsOverflow(tmp))
+                                if (checkCoordsOverflow(tmp)) {
+                                    emptyAroundCounter++
                                     continue
+                                }
 
                                 var currSide: sideType = currentTile.sides[i]
                                 var adjacentSide: sideType = hexagonesList[tmp.y][tmp.x].sides[(i + 3) % 6]
+                                if(adjacentSide == sideType.EMPTY)
+                                    emptyAroundCounter++
+
                                 if ((currSide != adjacentSide) && (adjacentSide != sideType.EMPTY))
                                     return true
+
                             }
+
+                            if(emptyAroundCounter==6)
+                                return true
+
                             hexagonesList[res.y][res.x].placeOnMap(currentTile)
                             currentTile = getNextTile()
                             activity?.setCurrentTile(currentTile.bitmap)
+                            activity?.nextPlayer()
 
                         }
 
@@ -418,9 +455,7 @@ class GameActivity : AppCompatActivity() {
 
 
     private fun setButtonListeners() {
-        currentTileView.setOnClickListener {
 
-        }
 
 
         pauseButton.setOnClickListener {

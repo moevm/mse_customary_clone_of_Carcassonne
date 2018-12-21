@@ -116,8 +116,7 @@ class GameActivity : AppCompatActivity() {
                 }
 
                 var bitmap = BitmapFactory.decodeResource(resources, tileDrawableId)
-                var sideLen = 200f
-                bitmap = Bitmap.createScaledBitmap(bitmap, (sideLen * sqrt(3f)).toInt(), (sideLen * 2).toInt(), false)
+                bitmap = Bitmap.createScaledBitmap(bitmap, (side__ * sqrt(3f)).toInt(), (side__ * 2).toInt(), false)
                 for (j in 0 until tileResources[i][6].toString().toInt()) {
                     val tileSidesType = ArrayList<sideType>()
                     for (k in 0..5) {

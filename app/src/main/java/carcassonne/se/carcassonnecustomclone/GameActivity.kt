@@ -11,6 +11,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import android.widget.Toast
 import carcassonne.se.carcassonnecustomclone.zoom.ZoomLayout
 import kotlinx.android.synthetic.main.activity_game.*
 import kotlinx.android.synthetic.main.activity_game.view.*
@@ -74,6 +75,10 @@ class GameActivity : AppCompatActivity() {
         params.setMargins(0, (margin * 1.5).toInt(), 0, 0)
         player.layoutParams = params
         playerInfoArea.addView(player)
+    }
+
+    fun makeToast(text: String) {
+        Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
     }
 
 
@@ -426,6 +431,7 @@ class GameActivity : AppCompatActivity() {
             currentPlayerIndex = 0
         }
         currentPlayerInfo()?.setCurrent(true)
+        makeToast("${players?.get(currentPlayerIndex)?.name} turn now")
     }
 
     private fun currentPlayerInfo(): PlayerGameInfo? {

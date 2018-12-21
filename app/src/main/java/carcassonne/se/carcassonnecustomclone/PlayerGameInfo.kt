@@ -23,13 +23,14 @@ class PlayerGameInfo(context: Context, playerInfo: PlayerInfo) : ConstraintLayou
             }
         }
 
-    private var figurineCount: Int = 7
+    var figurineCount: Int = 7
         set(value) {
             if (value in 0..7) {
                 field = value
                 figurineCounter.text = value.toString()
             }
         }
+
 
 
     init {

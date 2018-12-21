@@ -46,20 +46,22 @@ class Hexagon(X: Float, Y: Float, side: Float, roundColor: Int, patternBitmap: B
     }
 
     fun placeOnMap(tile: TileInfo) {
+        show()
         setBitmap(tile.bitmap)
         sides = tile.sides
-        show()
     }
 
     fun removeFromMap(defaultTile: TileInfo)
     {
+        hide()
         setBitmap(defaultTile.bitmap)
         sides = defaultTile.sides
-        hide()
     }
 
     fun updateBitmap()
     {
+        if(!isChosen())
+            return
         realBitmap = Bitmap.createScaledBitmap(bitmap, (sideLen * sqrt(3f)).toInt(), (sideLen * 2).toInt(), false)
         bitmap = realBitmap
     }

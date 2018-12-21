@@ -3,6 +3,7 @@ package carcassonne.se.carcassonnecustomclone
 
 import android.content.Context
 import android.graphics.*
+import android.media.MediaPlayer
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
@@ -407,6 +408,7 @@ class GameActivity : AppCompatActivity() {
                             }
 
                             hexagonesList[res.y][res.x].placeOnMap(currentTile)
+
 
                             currentCoords = res
                             tilePlaced = true

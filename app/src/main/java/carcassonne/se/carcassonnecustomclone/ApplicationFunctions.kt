@@ -2,6 +2,7 @@ package carcassonne.se.carcassonnecustomclone
 
 import android.app.Dialog
 import android.content.Context
+import android.media.MediaPlayer
 import android.support.v4.app.FragmentActivity
 import android.view.View
 import android.view.Window
@@ -31,6 +32,13 @@ fun hideDialogSystemUI(dialog: Dialog?, activity: FragmentActivity?) {
         window?.clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE)
         (activity?.getSystemService(Context.WINDOW_SERVICE) as WindowManager).updateViewLayout(window?.decorView, window?.attributes)
     }
+}
+
+
+fun setMediaVolume(media: MediaPlayer, volume: Int) {
+    val maxVolume = 20
+    val playerVolume = ((1f - Math.log((maxVolume - volume).toDouble())) / Math.log(maxVolume.toDouble())).toFloat()
+    media.setVolume(playerVolume, playerVolume)
 }
 
 

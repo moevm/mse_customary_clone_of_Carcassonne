@@ -206,7 +206,7 @@ class GameActivity : AppCompatActivity() {
                             )
                         )
                         center.x += (hexHorizAlign * 2) + 4
-                        println(center)
+                        //println(center)
                     }
                     if (oddFlag) {
                         oddFlag = false
@@ -220,7 +220,7 @@ class GameActivity : AppCompatActivity() {
                 }
                 shouldInit = false
             }
-            println("hello")
+            //println("hello")
             xTilesMax = hexagonesList[0].size - 1
             yTilesMax = hexagonesList.size - 1
             activity?.setCurrentTile(currentTile.bitmap)
@@ -370,8 +370,10 @@ class GameActivity : AppCompatActivity() {
                         var res = getIndexHexOnTap(PointF(event.x / zoom - shiftX, event.y / zoom - shiftY), side__)
                         if(tilePlaced) {
                             if(res == currentCoords){
-                                if(activity?.currentPlayerInfo()?.figurineCount == 0)
+                                if(activity?.currentPlayerInfo()?.figurineCount == 0) {
+                                    activity?.makeToast("You have no enough tokens for this")
                                     return true
+                                }
 
                                 hexagonesList[res.y][res.x].placeToken(event.x / zoom - shiftX, event.y / zoom - shiftY,
                                     activity?.players!![activity?.currentPlayerIndex!!].color)
@@ -381,10 +383,17 @@ class GameActivity : AppCompatActivity() {
                                 nextTurn()
 
                             }
+                            else
+                            {
+                                activity?.makeToast("Last placed tile must be selected")
+                                return true
+                            }
                         }
                         else if (res.x != -1) {
-                            if (currentTile == defaultTile || hexagonesList[res.y][res.x].isChosen())
+                            if (currentTile == defaultTile || hexagonesList[res.y][res.x].isChosen()) {
+                                activity?.makeToast("Tile can be placed only on empty space")
                                 return true
+                            }
 
                             var emptyAroundCounter = 0
                             for (i in 0..5) {
@@ -399,13 +408,17 @@ class GameActivity : AppCompatActivity() {
                                 if(adjacentSide == sideType.EMPTY)
                                     emptyAroundCounter++
 
-                                if ((currSide != adjacentSide) && (adjacentSide != sideType.EMPTY))
+                                if ((currSide != adjacentSide) && (adjacentSide != sideType.EMPTY)) {
+                                    activity?.makeToast("Can't be placed here, check nearby tiles")
                                     return true
+                                }
 
                             }
 
-                            if(emptyAroundCounter==6)
+                            if(emptyAroundCounter==6) {
+                                activity?.makeToast("Can't be placed here, there are no tiles nearby")
                                 return true
+                            }
 
                             hexagonesList[res.y][res.x].placeOnMap(currentTile)
                             currentCoords = res
@@ -458,7 +471,7 @@ class GameActivity : AppCompatActivity() {
                     //pincell.color = elem.getColor()
                     elem.draw(canvas)
                     //canvas.drawCircle(elem.center.x, elem.center.y, side__, roundPincell)
-                    println(elem.sideLen)
+                    //println(elem.sideLen)
 
                 }
             }

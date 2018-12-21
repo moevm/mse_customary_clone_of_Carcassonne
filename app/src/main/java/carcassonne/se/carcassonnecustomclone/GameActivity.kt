@@ -154,7 +154,7 @@ class GameActivity : AppCompatActivity() {
                 startTileSides
             )
             currentTile = getNextTile()
-            activity?.updateRemainingTilesButton(tiles.size)
+
 
 
 
@@ -333,6 +333,7 @@ class GameActivity : AppCompatActivity() {
             activity?.hideOkButton()
             activity?.hideDeclineButton()
             activity?.nextPlayer()
+            activity?.updateRemainingTilesButton(tiles.size)
         }
 
         fun cancelPlaceTile()

@@ -1,6 +1,7 @@
 package carcassonne.se.carcassonnecustomclone
 
 
+
 import android.view.View
 import android.view.ViewGroup
 import androidx.test.espresso.Espresso.onView
@@ -69,7 +70,7 @@ class GameActivityTest {
 
         val appCompatButton3 = onView(
             allOf(
-                withId(R.id.remainingTiles), withText("68/72"),
+                withId(R.id.remainingTiles),
                 childAtPosition(
                     childAtPosition(
                         withId(android.R.id.content),
@@ -99,7 +100,7 @@ class GameActivityTest {
 
         val currentTile = onView(
             allOf(
-                withId(R.id.currentTile),
+                withId(R.id.currentTileView),
                 childAtPosition(
                     childAtPosition(
                         withId(android.R.id.content),

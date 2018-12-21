@@ -1,11 +1,15 @@
 package carcassonne.se.carcassonnecustomclone
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.media.AudioManager
+import android.media.MediaPlayer
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.support.v7.app.AppCompatActivity
 import android.widget.SeekBar
 import kotlinx.android.synthetic.main.activity_settings.*
+import java.lang.Exception
 
 class SettingsActivity : AppCompatActivity() {
 
@@ -17,7 +21,6 @@ class SettingsActivity : AppCompatActivity() {
         setSeekbarListeners()
         loadPreferences()
     }
-
 
 
     private fun saveEffectsVolume(progress: Int) {
@@ -58,7 +61,7 @@ class SettingsActivity : AppCompatActivity() {
         effectsBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, i: Int, b: Boolean) {
                 saveEffectsVolume(i)
-                //TODO: неплохо было бы издавать какой-нибудь звук чтобы было понятно что за громкость
+                setVolume()
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar) {}
@@ -73,6 +76,31 @@ class SettingsActivity : AppCompatActivity() {
             override fun onStartTrackingTouch(seekBar: SeekBar) {}
             override fun onStopTrackingTouch(seekBar: SeekBar) {}
         })
+    }
+
+    fun setVolume() {
+        val media = MediaPlayer.create(this, R.raw.placetile)
+        media.setVolume(effectsBar.progress * 5f, effectsBar.progress * 5f)
+        media.start()
+        val audio = getSystemService(Context.AUDIO_SERVICE) as AudioManager
+
+        val maxMusicVolume = audio.getStreamMaxVolume(AudioManager.STREAM_MUSIC)
+
+        audio.setStreamVolume(
+            AudioManager.STREAM_MUSIC,
+            (maxMusicVolume * (effectsBar.progress.toFloat() / 20f)).toInt(),
+            0
+        )
+
+
+        try {
+            val maxSystemVolume = audio.getStreamMaxVolume(AudioManager.STREAM_SYSTEM)
+            audio.setStreamVolume(
+                AudioManager.STREAM_SYSTEM,
+                (maxSystemVolume * (effectsBar.progress.toFloat() / 20f)).toInt(),
+                0
+            )
+        } catch (e: Exception) {}
     }
 
 

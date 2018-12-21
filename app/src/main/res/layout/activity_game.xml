@@ -58,7 +58,6 @@
 
     <Button android:layout_width="@dimen/game_button_size"
             android:layout_height="@dimen/game_button_size"
-            android:text="68/72"
             android:textSize="@dimen/small_text_size"
             android:fontFamily="@font/aclonica"
             android:id="@+id/remainingTiles"

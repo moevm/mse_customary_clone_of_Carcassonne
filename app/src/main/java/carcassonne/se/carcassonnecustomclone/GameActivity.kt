@@ -14,7 +14,6 @@ import android.widget.LinearLayout
 import android.widget.Toast
 import carcassonne.se.carcassonnecustomclone.zoom.ZoomLayout
 import kotlinx.android.synthetic.main.activity_game.*
-import kotlinx.android.synthetic.main.activity_game.view.*
 import kotlin.math.abs
 import kotlin.math.sqrt
 
@@ -22,6 +21,7 @@ class GameActivity : AppCompatActivity() {
 
     private var players: ArrayList<PlayerInfo>? = null
     private var currentPlayerIndex: Int = -1
+    private var field: Canvass? =  null
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)
@@ -39,6 +39,7 @@ class GameActivity : AppCompatActivity() {
         val canvass = Canvass(this)
         canvass.activity = this
         canvass.layoutParams = ViewGroup.LayoutParams(24000, 24000)
+        this.field = canvass
         zoomLayout.addView(canvass)
         setButtonListeners()
         players = intent.getParcelableArrayListExtra("players")
@@ -47,6 +48,7 @@ class GameActivity : AppCompatActivity() {
         nextPlayer()
         hideOkButton()
         hideDeclineButton()
+        updateRemainingTilesButton(field?.tiles?.size ?: 0)
     }
 
     /*Добавляет игроков на панель игроков слева*/
@@ -153,6 +155,7 @@ class GameActivity : AppCompatActivity() {
             )
 
             currentTile = getNextTile()
+            activity?.updateRemainingTilesButton(tiles.size)
 
 
         }
@@ -367,6 +370,7 @@ class GameActivity : AppCompatActivity() {
                             currentTile = getNextTile()
                             activity?.setCurrentTile(currentTile.bitmap)
                             activity?.nextPlayer()
+                            activity?.updateRemainingTilesButton(tiles.size)
 
                         }
 
@@ -442,6 +446,11 @@ class GameActivity : AppCompatActivity() {
     }
 
 
+    fun updateRemainingTilesButton(remTiles: Int) {
+        remainingTiles.text = "$remTiles/88"
+    }
+
+
     private fun showOkButton() {
         okButton.visibility = View.VISIBLE
     }
@@ -458,10 +467,12 @@ class GameActivity : AppCompatActivity() {
         declineButton.visibility = View.INVISIBLE
     }
 
+    private fun openRemainigTilesDialog(tiles: ArrayList<TileInfo>) {
+
+    }
+
 
     private fun setButtonListeners() {
-
-
 
         pauseButton.setOnClickListener {
             showPauseDialog()
@@ -474,6 +485,9 @@ class GameActivity : AppCompatActivity() {
 
         remainingTiles.setOnClickListener {
             val tilesDialog = TilesDialog()
+            if(field != null) {
+                tilesDialog.tileArray = field!!.tiles
+            }
             tilesDialog.show(supportFragmentManager, "TilesDialog")
         }
     }

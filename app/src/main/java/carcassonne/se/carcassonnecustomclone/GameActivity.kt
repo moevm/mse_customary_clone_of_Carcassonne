@@ -415,6 +415,7 @@ class GameActivity : AppCompatActivity() {
 
 
 
+
                         }
                         invalidate()
                     }

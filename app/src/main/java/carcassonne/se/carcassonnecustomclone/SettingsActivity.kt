@@ -79,9 +79,9 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     fun setVolume() {
-        val media = MediaPlayer.create(this, R.raw.placetile)
-        media.setVolume(effectsBar.progress * 5f, effectsBar.progress * 5f)
-        media.start()
+//        val media = MediaPlayer.create(this, R.raw.placetile)
+//        media.setVolume(effectsBar.progress * 5f, effectsBar.progress * 5f)
+//        media.start()
         val audio = getSystemService(Context.AUDIO_SERVICE) as AudioManager
 
         val maxMusicVolume = audio.getStreamMaxVolume(AudioManager.STREAM_MUSIC)
